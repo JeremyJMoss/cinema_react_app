@@ -1,38 +1,244 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --primary-black: #0D0D0D;
+    --primary-color: #253D5B;
+    --accent-color: #C9A959;
+    --primary-white: #eeeeee;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html, body, #root, .App {
+    height: 100%;
+    width: 100%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Inter', serif;
+    box-sizing: border-box;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-black);
 }
 
-.App-link {
-  color: #61dafb;
+/* utility */
+.text-danger {
+    color: rgb(207, 15, 15);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.font-huge {
+    font-size: 2.5rem
+}
+
+.font-xxl {
+    font-size: 2rem;
+}
+
+.font-xl {
+    font-size: 1.75rem;
+}
+
+.font-large {
+    font-size: 1.5rem;
+}
+
+.font-medium {
+    font-size: 1.25rem;
+}
+
+.font-normal {
+    font-size: 1rem;
+}
+
+.font-small {
+    font-size: 0.8rem;
+}
+
+.font-xs {
+    font-size: 0.6rem;
+}
+
+.btn {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-small {
+    padding: 10px 24px;
+    font-size: 1.2rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--primary-white);
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+}
+
+.d-flex {
+    display: flex;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+/* Top Nav Styling */
+.top-nav {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 40px;
+    padding-block: 20px;
+    background-color: var(--primary-color);
+}
+
+.top-nav nav a {
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin-right: 3rem;
+    color: var(--primary-white);
+    font-weight: 500;
+}
+
+/* Login modal styling */
+.login-modal_backdrop{
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    position: absolute;
+    top:0;
+    right: 0;
+}
+
+.login-modal {
+    background-color: #eeeeee;
+    border-radius: 4px;
+    overflow: hidden;
+    min-width: 300px;
+    width: 100%;
+    height: 100%;
+    max-width: 800px;
+    display:flex;
+}
+
+.login-modal_body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.login-modal_header {
+    display: flex;
+    width: 100%;
+    padding-inline: 25px;
+    margin-bottom: 20px;
+    text-decoration: underline;
+    text-underline-offset: 10px;
+    text-decoration-color: var(--primary-color);
+}
+
+.login-modal_close-section {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.login-modal_close {
+    outline: none;
+    border: none;
+    background-color: var(--primary-color);
+    padding: 4px 4px 0px 4px;
+    border-radius: 2px;
+}
+
+.login-modal_close:hover {
+    cursor: pointer;
+    transition-duration: 100ms;
+    background-color: var(--accent-color);
+}
+
+.login-modal_close img {
+    width: 32px;
+}
+
+.login-modal_inputs {
+    padding: 25px;
+}
+
+.login-modal_input-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-modal_input-field label {
+    margin-bottom: 1rem;
+    font-size: 1.15rem;
+    color: var(--primary-black);
+}
+
+.login-modal_input-field input {
+    padding-block: 10px;
+    padding-inline: 20px;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+}
+
+.login-modal_button-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-block: 24px;
+    padding-inline: 24px;
+    align-items: center;
+    margin-top: auto;
+}
+
+.login-modal_button-container button:hover {
+    background-color: var(--accent-color);
+    color: var(--primary-black);
+    transition-duration: 100ms;
+}
+
+/* Login modal media queries */
+@media screen and (min-width: 576px){
+    .login-modal {
+        width: 80%;
+        height: auto;
+    }
+}
+
+/* Admin */
+.admin-grid {
+    width: 100%;
+    height: 100%;
+    display:grid;
+    grid-template-areas: 
+    "aside main";
+    grid-template-rows: 1fr;
+    grid-template-columns: 100px 1fr;
+}
+
+.admin-grid aside {
+    grid-area: aside;
+    background-color: var(--primary-color);
+}
+
+.admin-grid main {
+    grid-area: main;
 }
