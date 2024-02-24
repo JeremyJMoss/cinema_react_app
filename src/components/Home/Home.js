@@ -1,8 +1,9 @@
-import React from 'react'
+import MovieArchiveSection from "../Sections/MovieArchiveSection";
+
 
 const Home = () => {
   return (
-    <div>Home</div>
+    <MovieArchiveSection/>
   )
 }
 

@@ -1,32 +1,59 @@
 import { Link, Outlet } from "react-router-dom"
-import Login from "../components/Login/Login";
-import {useState} from 'react';
-import flickfind_logo from "../assets/flick_and_find_white.svg";
+import Login from "../components/Auth/Login";
+import { useAuth } from '../context/AuthContext';
+import flickfind_logo from "../assets/flick_and_find.svg";
+import hamburger_icon from "../assets/icons8-hamburger-menu.svg";
+import Button from "../components/UI/Buttons/Button";
+import { useState } from "react";
 
 const Root = () => {
-    const [loginModalOpened, setLoginModalOpened] = useState(false);
+    const { showLoginModal, toggleLoginModal, logout, token, user } = useAuth();
+    const [hamburgerMenuHidden, setHamburgerMenuHidden] = useState(true);
 
-    const handleModalOpen = () => {
-        setLoginModalOpened(true);
+    const toggleMenu = () => {
+        setHamburgerMenuHidden(prev => !prev)
     }
 
     return (
         <>
-            <header className="top-nav">
+            <header className="flex w-full justify-between items-center px-10 py-5">
                 <div>
                     <Link to="/">
-                        <img width="120px" src={flickfind_logo} />
+                        <img className="md:w-32 w-24" alt="Flick and Find Logo" src={flickfind_logo} />
                     </Link>
                 </div>
-                <div className="d-flex align-items-center">
-                    <nav>
-                        <Link to="/admin">Admin</Link>
-                    </nav>
-                    <button className="btn btn-small btn-accent" onClick={handleModalOpen}>Sign In</button>
+                <button onClick={toggleMenu} className='inline-block sm:hidden'>
+                    <img src={hamburger_icon} className="w-10" alt=""/>
+                </button>
+                <menu className="hidden sm:flex items-center ">
+                    {user && user.isAdmin && <Link to="/admin" className="decoration-none text-lg md:text-xl mr-11 text-black-800 font-medium">Admin</Link>}
+                    {!token && !user && 
+                    <Button 
+                    onClick={toggleLoginModal}
+                    colorStyling='primary'
+                    type='button'
+                    size='medium'>
+                        Log In
+                    </Button>}
+                    {token && user && 
+                    <Button 
+                    onClick={logout}
+                    colorStyling='primary'
+                    type='button'
+                    size="medium">
+                        Logout
+                    </Button>}
+                </menu>
+                <div className={`absolute w-full h-full top-0 right-0 backdrop sm:hidden ${hamburgerMenuHidden ? 'hidden' : 'block'}`} onClick={toggleMenu}>
+                    <menu onClick={(e) => e.stopPropagation()} className="absolute top-0 right-0 px-8 py-6 bg-green-200 h-full flex-col flex">
+                        {user && user.isAdmin && <Link to="/admin" className="decoration-none text-lg md:text-xl text-black-800 font-medium">Admin</Link>}
+                    </menu>
                 </div>
             </header>
-            {loginModalOpened && <Login setModalClose={setLoginModalOpened}/>}
-            <Outlet/>
+            {showLoginModal && <Login setModalClose={toggleLoginModal}/>}
+            <main className="px-8 py-4">
+                <Outlet/>
+            </main>
         </>
     )
 }
