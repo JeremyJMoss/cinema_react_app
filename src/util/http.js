@@ -9,9 +9,10 @@ export const request = async (url, logoutFn, headers, method = 'GET', body = nul
         if (logoutFn){
             if (err.expiredAt){
                 logoutFn();
+                throw new Error('Unauthorized or Expired Token');
             }
         }
-        throw new Error('Unauthorized or Expired Token');
+        throw new Error(err.message);
     } 
     else {    
         return await response.json();

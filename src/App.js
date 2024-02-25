@@ -1,6 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import Root from "./layouts/Root";
-import Home from "./components/Home/Home";
+import Home from "./components/FrontPages/Home";
 import AdminRoot from "./layouts/AdminRoot";
 import AdminArea from './components/Admin/AdminArea';
 import Users from './components/Admin/Users/Users';
@@ -11,6 +11,7 @@ import NewUser from './components/Admin/Users/NewUser';
 import Movies from './components/Admin/Movies/Movies';
 import NewMovie from './components/Admin/Movies/NewMovie';
 import EditMovie from './components/Admin/Movies/EditMovie';
+import SingleMovie from './components/FrontPages/SingleMovie';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<Root />}>
           <Route index element={<Home/>} />
           <Route path="signup" element={<Signup/>}/>
+          <Route path="movies/:id" element={<SingleMovie/>}/>
         </Route>,
         <Route path="/admin" element={<AdminRoot />} >
           <Route index element={<AdminArea/>}/>

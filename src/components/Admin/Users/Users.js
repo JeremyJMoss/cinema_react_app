@@ -33,7 +33,11 @@ const Users = () => {
 
   const handleDelete = (id) => {
     setDeleteModalId(null);
-    setUsers(prev => prev.filter((user) => user.id !== id));
+    setUsers(prev => {
+      return prev.filter((user) => {
+        return user.id !== id; 
+      })
+    });
   }
 
   return (

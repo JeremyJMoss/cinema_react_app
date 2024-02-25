@@ -8,6 +8,7 @@ import { useFetch } from '../../../hooks/useFetch';
 
 const DeleteModal = ({deleteId, setDeleteId, onDelete, baseRoute}) => {
     const deleteBtnRef = useRef(null);
+    const cancelBtnRef = useRef(null);
     const {token, logout} = useAuth();
 
     const sendFetch = useCallback(async () => {
@@ -54,7 +55,7 @@ const DeleteModal = ({deleteId, setDeleteId, onDelete, baseRoute}) => {
                 'Authorization': `Bearer ${token}`
             },
             "DELETE",
-        ).then(deleteId => {
+        ).then(() => {
             onDelete(deleteId);
             setErrMessage('');
         }).catch (error => {
@@ -63,13 +64,25 @@ const DeleteModal = ({deleteId, setDeleteId, onDelete, baseRoute}) => {
     }
 
     // focus trap within modal
-    const handleBlur = () => {
-        const firstElement = deleteBtnRef.current;
-        firstElement.focus();
+    const handleShiftTab = (e) => {
+        if (e.key === "Tab" && e.shiftKey) {
+            e.preventDefault();
+            const secondElement = cancelBtnRef.current;
+            secondElement.focus();
+        }
+    }
+
+    const handleTab = (e) => {
+        if (e.key === "Tab" && !e.shiftKey){
+            e.preventDefault();
+            const firstElement = deleteBtnRef.current;
+            firstElement.focus();
+        }
+        
     }
 
     return createPortal(
-        <div className='bg-stone-900/90 absolute z-10 w-full h-full items-center justify-center flex' onClick={handleCancel}>
+        <div className='bg-stone-900/90 fixed top-0 left-0 z-10 w-full h-full items-center justify-center flex' onClick={handleCancel}>
             <dialog className='flex flex-col items-center static p-10 rounded' onClick={(e) => e.stopPropagation()}>               
                 { errMessage && !isFetching &&
                 <div className="w-full flex items-center justify-center mb-4">
@@ -87,6 +100,7 @@ const DeleteModal = ({deleteId, setDeleteId, onDelete, baseRoute}) => {
                         size='medium'
                         onClick={handleDelete}
                         ref={deleteBtnRef}
+                        onKeyDown={handleShiftTab}
                         >
                             Delete
                         </Button>
@@ -94,7 +108,8 @@ const DeleteModal = ({deleteId, setDeleteId, onDelete, baseRoute}) => {
                         colorStyling='primary'
                         size='medium'
                         onClick={handleCancel}
-                        onBlur={handleBlur}>
+                        ref={cancelBtnRef}
+                        onKeyDown={handleTab}>
                             Cancel
                         </Button>
                     </div>
@@ -102,7 +117,7 @@ const DeleteModal = ({deleteId, setDeleteId, onDelete, baseRoute}) => {
                 }
                 {isFetching && <div>Loading...</div>}
             </dialog>
-        </div>, document.getElementById('modal'))
+        </div>, document.body)
 };
 
 export default DeleteModal

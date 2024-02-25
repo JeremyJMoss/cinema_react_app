@@ -10,6 +10,7 @@ import { createPortal } from "react-dom";
 
 function Login({setModalClose}) {
     const closeBtnRef = useRef(null);
+    const loginBtnRef = useRef(null);
     const {login} = useAuth();
     const [LoginError, setLoginError] = useState(null);
     const [formData, setFormData] = useState({
@@ -90,19 +91,30 @@ function Login({setModalClose}) {
         }
     }
 
-    const handleBlur = () => {
-        closeBtnRef.current.focus();
+    const handleTab = (e) => {
+        if (e.key === "Tab" && !e.shiftKey){
+            e.preventDefault();
+            closeBtnRef.current.focus();
+        }
+    }
+
+    const handleShiftTab = (e) => {
+        if (e.key === "Tab" && e.shiftKey){
+            e.preventDefault();
+            loginBtnRef.current.focus();
+        }
     }
 
   return createPortal(
-    <div className="bg-stone-900/90 h-full w-full absolute z-10 justify-center items-center top-0 right-0 flex" onClick={handleCloseModal}>
+    <div className="bg-stone-900/90 h-full w-full fixed z-10 justify-center items-center top-0 right-0 flex" onClick={handleCloseModal}>
         <div className="md:w-4/5 md:h-auto bg-slate-200 rounded w-full h-full flex overflow-hidden min-w-80 max-w-3xl" onClick={(e) => e.stopPropagation()}>
             <form className="flex grow flex-col">
                 <div className="w-full flex justify-end">
                     <button 
                     onClick={handleCloseModal} 
                     type="button"
-                    ref={closeBtnRef} 
+                    ref={closeBtnRef}
+                    onKeyDown={handleShiftTab}
                     className="bg-cyan-600 hover:cursor-pointer hover:bg-cyan-900 duration-100 border-none rounded-sm p-1">
                         <img className="w-7" src={closeImg} alt=""/>
                     </button>
@@ -142,14 +154,15 @@ function Login({setModalClose}) {
                     size='medium'
                     type="button" 
                     onClick={handleSubmit}
-                    onBlur={handleBlur}>
+                    ref={loginBtnRef}
+                    onKeyDown={handleTab}>
                         Log In
                     </Button>
                 </div>
             </form>
         </div>
     </div>,
-    document.getElementById('modal')
+    document.body
   )
 }
 

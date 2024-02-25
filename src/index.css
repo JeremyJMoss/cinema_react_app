@@ -3,6 +3,13 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'Inter', serif;
+    box-sizing: border-box;
+}
+
 html, body, #root, .App {
     height: 100%;
     width: 100%;
@@ -12,14 +19,19 @@ html, body, #root, .App {
     position: relative;
 }
 
-* {
-    padding: 0;
-    margin: 0;
-    font-family: 'Inter', serif;
-    box-sizing: border-box;
+#modal {
+    position: absolute;
+    height: 100%;
+    width: 100%;
 }
 
 table {
     border-spacing: 0;
     border-collapse: separate;
+}
+
+/* setting focus style for custom file input*/
+#cover_art:focus + label{
+    outline: 1px solid #000;
+    outline: -webkit-focus-ring-color auto 2px;
 }

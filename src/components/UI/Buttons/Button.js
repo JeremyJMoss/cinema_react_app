@@ -1,13 +1,13 @@
 import { forwardRef, useEffect } from "react";
 
-const Button = forwardRef(({children, type, onClick, colorStyling, size, onBlur, shadow}, ref) => {
+const Button = forwardRef(({children, type, onClick, colorStyling, size, onKeyDown}, ref) => {
     
     // delete modal 
     useEffect(() => {
-        if (ref && ref.current){
+        if (ref && ref.current && children === 'Delete'){
             ref.current.focus();
         }
-    }, [ref])
+    }, [ref, children])
     
     const styling = {
         textColor: 'text-black-800',
@@ -61,7 +61,7 @@ const Button = forwardRef(({children, type, onClick, colorStyling, size, onBlur,
         }
     }
 
-    const buttonClasses = `${Object.values(sizing).join(' ')} ${Object.values(styling).join(' ')} border-none rounded cursor-pointer duration-100 ${shadow ? shadow : 'shadow-md'}`;
+    const buttonClasses = `${Object.values(sizing).join(' ')} ${Object.values(styling).join(' ')} border-none rounded cursor-pointer duration-100 shadow-md`;
 
     return (
         <button 
@@ -69,7 +69,7 @@ const Button = forwardRef(({children, type, onClick, colorStyling, size, onBlur,
         type={type}
         onClick={onClick}
         ref={ref}
-        onBlur={onBlur}
+        onKeyDown={onKeyDown}
         >
             {children}
         </button>

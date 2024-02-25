@@ -11,6 +11,7 @@ export function useFetch(fetchFn, initialValue){
             try {
                 const data = await fetchFn();
                 setData(data);
+                setErrMessage('');
             } catch(error){
                 setErrMessage(error.message);
             }

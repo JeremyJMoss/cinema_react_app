@@ -20,14 +20,14 @@ const Movies = () => {
 
   const { 
     isFetching, 
-    data: movies, 
+    data,
     setData: setMovies, 
     errMessage 
   } = useFetch(sendFetch,[])
 
   const handleDelete = (id) => {
     setDeleteModalId(null);
-    setMovies(prev => prev.filter((movie) => movie.id !== id));
+    setMovies(prev => prev.movies.filter((movie) => movie.id !== id));
   }
 
   const handleDeleteModal = (id) => {
@@ -56,10 +56,10 @@ const Movies = () => {
         </Button>
       </div>
       {isFetching && <div>Loading...</div>}
-      {!errMessage && !isFetching && movies?.length > 0 &&
+      {!errMessage && !isFetching && data?.movies?.length > 0 &&
       <>
         <section className="grid grid-cols-1 md:hidden gap-5">
-          {movies.map((movie) => {
+          {data.movies.map((movie) => {
             return (
               <div key={movie.id} className="bg-white shadow-xl text-black-800 rounded-lg flex">
                 <div className="p-5 flex flex-col grow">
@@ -90,7 +90,7 @@ const Movies = () => {
             </tr>
           </thead>
           <tbody>
-            {movies.map((movie, index) => {
+            {data.movies.map((movie, index) => {
               return (
                 <tr key={movie.id} className={index % 2 === 0 ? "bg-slate-100" : null}>
                   <td className="px-5 py-3">{movie.id}</td>
