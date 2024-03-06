@@ -8,6 +8,7 @@ import Select from '../../UI/Select';
 import ErrorMessage from '../../UI/ErrorMessage';
 import { useFetch } from '../../../hooks/useFetch';
 import { request } from '../../../util/http';
+import TabularNav from '../../UI/TabularNav';
 
 const EditUser = () => {
     const {id} = useParams();
@@ -79,18 +80,25 @@ const EditUser = () => {
     }
     
     return (
-        <section className="p-7 w-full h-full">
-            <div className="max-w-lg">
-            {errMessage && 
-            <ErrorMessage
-            message={errMessage}/>}
-            {isFetching &&
-            <div>Loading...</div>
-            }
-            {userToEdit && !isFetching &&
-                <form>
-                    <div className="mb-7">
+        <>
+            <TabularNav
+            links={[
+                {
+                    text: 'User',
+                    to: `/admin/users/edit/${id}`
+                }
+            ]}/>
+            <div className="max-w-2xl p-10">
+                {isFetching &&
+                    <div>Loading...</div>
+                }
+                {userToEdit && !isFetching &&
+                    <form>
                         <h1 className="text-2xl mb-6 text-slate-800 font-medium">Edit User</h1>
+                        {errMessage && 
+                            <ErrorMessage
+                            message={errMessage}/>
+                        }
                         <Input
                         fieldType="text"
                         fieldName="First Name" 
@@ -124,19 +132,18 @@ const EditUser = () => {
                         required={true}
                         onFieldChange={handleFieldChange}
                         value={formData.role}/>}
-                    </div>
-                    <div className='flex w-full justify-end'>
-                        <Button
-                        colorStyling='secondary'
-                        size="medium"
-                        onClick={handleSubmit}>
-                            Update
-                        </Button>
-                    </div>
-                </form>
-            }
+                        <div className='flex w-full justify-end'>
+                            <Button
+                            colorStyling='secondary'
+                            size="medium"
+                            onClick={handleSubmit}>
+                                Update
+                            </Button>
+                        </div>
+                    </form>
+                }
             </div>
-        </section>
+        </>
     )
 }
 

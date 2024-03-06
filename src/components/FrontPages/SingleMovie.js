@@ -4,6 +4,7 @@ import { request } from "../../util/http";
 import { BASE_URL } from "../../config/constants";
 import { useFetch } from "../../hooks/useFetch";
 import Rating from "../Sections/Partials/Rating";
+import ErrorMessage from "../UI/ErrorMessage";
 
 const SingleMovie = () => {
     const {id} = useParams();
@@ -29,7 +30,10 @@ const SingleMovie = () => {
     return (
         <section>
             {isFetching && <div>Loading...</div>}
-            {errMessage && !isFetching && <div>errMessage</div>}
+            {errMessage && !isFetching && 
+            <ErrorMessage 
+            message={errMessage}
+            />}
             {!isFetching && !errMessage && movie && 
             <article>
                 <div className="flex flex-col sm:flex-row gap-6">
@@ -37,17 +41,21 @@ const SingleMovie = () => {
                     src={`${BASE_URL}/${movie.cover_art}`}
                     className="w-72"
                     alt={`cover art for ${movie.title}`}/>
-                    <div className="h-auto flex flex-col justify-end mb-2">
-                        <h1 className="text-3xl font-medium">{movie.title}</h1>
-                        <div className="mt-2 flex items-center">
+                    <div className="h-auto gap-2 flex flex-col justify-end mb-2">
+                        <h1 className="text-4xl font-medium">{movie.title}</h1>
+                        <div className="flex items-center">
                             <Rating
                             rating={movie.rating}
                             size='medium'/>
-                            <p className="md:text-lg pl-3 pr-5 border-r-2 border-orange-200">{movie.run_time} mins</p>
-                            <p className="pl-5 md:text-lg">{formattedDate}</p>
+                            <p className="md:text-lg pl-3 pr-4 border-r-2 border-orange-200">{movie.run_time} mins</p>
+                            <p className="pl-4 md:text-lg">{formattedDate}</p>
                         </div>
                         {movie.director && 
-                        <p className="mt-2">{movie.director}</p>}
+                        <p><span className="font-semibold">Directed By:</span> {movie.director}</p>}
+                        {movie.cast.length > 0 &&
+                        <p>
+                            <span className="font-semibold">Cast:</span> {movie.cast.map(actor => actor.name).join(', ')}
+                        </p>}
                     </div>
                 </div>
                 <div className="py-6">

@@ -6,6 +6,7 @@ import { request } from '../../util/http';
 import Pagination from '../UI/Pagination';
 import Rating from './Partials/Rating';
 import { Link } from 'react-router-dom';
+import ErrorMessage from '../UI/ErrorMessage';
 
 const MovieArchiveSection = () => {
     const [page, setPage] = useState(1);
@@ -27,7 +28,10 @@ const MovieArchiveSection = () => {
     return (
         <section className=''>
             {isFetching && <div>Loading...</div>}
-            {errMessage && <div>{errMessage}</div>}
+            {errMessage && 
+            <ErrorMessage
+            message={errMessage}
+            />}
             <div 
             className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 place-items-center'
             >

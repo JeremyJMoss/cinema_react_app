@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       backgroundColor: {
-        'error': 'rgba(245, 52, 4, 0.541)'
+        'error': 'rgba(245, 52, 4, 0.541)',
+        'paper': '#ddc385'
       }
     },
   },

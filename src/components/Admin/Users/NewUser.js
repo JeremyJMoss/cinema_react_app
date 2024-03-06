@@ -7,6 +7,7 @@ import Button from "../../UI/Buttons/Button";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../UI/ErrorMessage";
 import { request } from "../../../util/http";
+import TabularNav from "../../UI/TabularNav";
 
 const NewUser = () => {
     const { token, user, logout } = useAuth();
@@ -37,7 +38,7 @@ const NewUser = () => {
     const handleSubmit = () => {
         const postData = async () => {
             try {
-                const result = await request(`${BASE_URL}/signup`,
+                await request(`${BASE_URL}/signup`,
                     logout,
                     {
                         'Authentication': `Bearer ${token}`,
@@ -60,14 +61,21 @@ const NewUser = () => {
         
 
     return (
-        <section className="p-7 w-full h-full">
-            
-            <div className="max-w-lg">
-                {errMessage && 
-                <ErrorMessage
-                message={errMessage}/>}
-                <div className="mb-7">
+        <>
+            <TabularNav
+            links={[
+                {
+                    text: 'User',
+                    to: '/admin/users/new'
+                }
+            ]}/>
+            <div className="max-w-2xl p-10">
+                <form>
                     <h1 className="text-2xl mb-6 text-slate-800 font-medium">Create New User</h1>
+                    {errMessage && 
+                        <ErrorMessage
+                        message={errMessage}/>
+                    }
                     <Input
                     fieldType="text"
                     fieldName="First Name" 
@@ -119,9 +127,9 @@ const NewUser = () => {
                             Create
                         </Button>
                     </div>
-                </div>
+                </form>
             </div>
-        </section>
+        </>
     )
 }
 

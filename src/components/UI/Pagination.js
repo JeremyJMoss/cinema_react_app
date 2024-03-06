@@ -24,7 +24,7 @@ const Pagination = ({page, totalPages, handlePagination}) => {
                 onClick={() => handleChangePage(false)}
                 className="flex items-center p-2"
                 >
-                    <img src={leftArrow} className="mr-1 w-4"/>
+                    <img src={leftArrow} className="mr-1 w-4" alt="previous button icon"/>
                     <p>Previous</p>
                 </button>}
                 <p className="font-medium p-2">Page <span className="font-extrabold">{page}</span> of <span className="font-extrabold">{totalPages}</span></p>
@@ -33,7 +33,7 @@ const Pagination = ({page, totalPages, handlePagination}) => {
                 onClick={() => handleChangePage(true)}
                 className="flex items-center p-2">
                     <p >Next</p>
-                    <img src={rightArrow} className="ml-1 w-4"/>
+                    <img src={rightArrow} className="ml-1 w-4" alt="next button icon"/>
                 </button>}
             </div>
         </div>

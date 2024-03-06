@@ -35,3 +35,78 @@ table {
     outline: 1px solid #000;
     outline: -webkit-focus-ring-color auto 2px;
 }
+
+.top-tabs a {
+    position: relative;
+}
+
+.top-tabs a.active {
+    background-color: white;
+}
+
+.top-tabs a {
+    background-color: #ddc385;
+}
+
+.top-tabs a:last-child::after, .top-tabs a:last-child::before,
+.top-tabs a:first-child::after, .top-tabs a:first-child::before,
+.top-tabs a span::before, .top-tabs a span::after, .top-tabs a.active span::before, .top-tabs a.active span::after {
+    content: '';
+    position: absolute;
+}
+
+.top-tabs a::before, .top-tabs a::after {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.top-tabs a::before {
+    bottom: 0;
+    left: -20px;
+}
+
+.top-tabs a::after {
+    bottom: 0;
+    right: -20px;
+}
+
+.top-tabs a:last-child::after, .top-tabs a:first-child::before {
+    background-color: rgb(191 219 254);
+}
+
+.top-tabs a::before, .top-tabs a::after {
+    background-color: #ddc385;
+}
+
+.top-tabs a span::before {
+    left: -10px;
+    bottom: 0;
+}
+
+.top-tabs a span::after {
+    right: -10px;
+    bottom: 0;
+}
+
+.top-tabs a span::before, .top-tabs a span::after {
+    width: 10px;
+    height: 10px;
+    z-index: 1;
+    background-color: #ddc385;
+}
+
+.top-tabs a.active {
+    z-index: 3;
+}
+
+.top-tabs a.active span::before, .top-tabs a.active span::after {
+    background-color: white;
+}
+
+
+
+
+
+

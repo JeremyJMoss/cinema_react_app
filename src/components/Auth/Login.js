@@ -119,13 +119,13 @@ function Login({setModalClose}) {
                         <img className="w-7" src={closeImg} alt=""/>
                     </button>
                 </div>
-                { LoginError && 
-                <ErrorMessage
-                message={LoginError}/>}
                 <div className="login-modal_header flex w-full px-6 mb-5">
                     <h2 className="text-4xl underline underline-offset-6 decoration-red-500">Log In</h2>
                 </div>
                 <div className="p-6">
+                    { LoginError && 
+                    <ErrorMessage
+                    message={LoginError}/>}
                     <Input
                     fieldType="email"
                     fieldName="Email Address"

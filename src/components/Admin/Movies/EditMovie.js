@@ -9,6 +9,8 @@ import { request } from "../../../util/http";
 import { useParams, useNavigate } from "react-router-dom";
 import { useFetch } from "../../../hooks/useFetch";
 import CoverArtInput from "../CoverArtInput";
+import SelectAjax from "../../UI/SelectAjax";
+import TabularNav from "../../UI/TabularNav";
 
 const EditMovie = () => {
     const {id} = useParams();
@@ -21,11 +23,13 @@ const EditMovie = () => {
         release_date: '',
         rating: 'G',
         cover_art: null,
-        director: ''
+        director: '',
+        cast: []
     });
 
     const [uploadPreview, setUploadPreview] = useState(false);
     const [fileName, setFileName] = useState('');
+    const [newCastCount, setNewCastCount] = useState(0);
 
     const sendFetch = useCallback(async () => {
         const result = await request(
@@ -41,7 +45,8 @@ const EditMovie = () => {
             release_date: result.release_date,
             rating: result.rating,
             director: result.director,
-            cover_art: result.cover_art
+            cover_art: result.cover_art,
+            cast: result.cast
         })
 
         return result;
@@ -69,7 +74,7 @@ const EditMovie = () => {
             const file = e.target.files[0];
             const { name: fileName, size } = file;
             const fileSize = (size / 1000).toFixed(2);
-            const fileNameAndSize = `${fileName} - ${fileSize}KB`;
+            const fileNameAndSize = `${fileName} - ${fileSize} KB`;
             setFileName(fileNameAndSize);
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -88,12 +93,22 @@ const EditMovie = () => {
     const handleSubmit = () => {
         const postData = async () => {
             const formDataToSend = new FormData();
-            formDataToSend.append('id', id);
             for (const [name, value] of Object.entries(formData)){
-                formDataToSend.append(name, value);
+                if (name === 'cast'){
+                    value.forEach(member => {
+                        // remove new actor id's so they can be created on the server, id's only used for key attribute
+                        if (typeof member.id === "string"){
+                            delete member.id;
+                        }
+                    })
+                    formDataToSend.append(name, JSON.stringify(value))
+                }
+                else{
+                    formDataToSend.append(name, value);
+                }
             }
             try {
-                await request(`${BASE_URL}/movie`,
+                await request(`${BASE_URL}/movie/${id}`,
                     logout,
                     {
                         'Authorization': `Bearer ${token}` 
@@ -102,7 +117,9 @@ const EditMovie = () => {
                     formDataToSend
                 );
                 setErrMessage('');
+                setNewCastCount(0);
                 navigate('/admin/movies');
+
             } catch(error){
                 setErrMessage(error.message);
             }
@@ -111,19 +128,59 @@ const EditMovie = () => {
         postData();
     }
 
+    const handleSetCast = (castMember, isDelete = false) => {
+        // for adding cast member to list of cast
+        if (!isDelete){
+            if (!castMember.id){
+                // add new cast id to new tags for key attribute react rendering
+                castMember.id = `new${newCastCount}`;
+                setNewCastCount(prev => ++prev);
+            }
+            setFormData(prev => {
+                return { 
+                    ...prev,
+                    cast: [
+                        ...prev.cast,
+                        castMember
+                    ]
+                }
+            })
+            return;
+        }
+        // when deleting cast member from list
+        setFormData(prev => {
+            return {
+                ...prev,
+                cast: [
+                    ...prev.cast.filter(actor => {
+                        return actor.id !== castMember.id;
+                    })
+                ]
+            }
+        })
+    }
+
     return (
-        <section className="p-10 w-full h-full">
-            <div className="max-w-lg">
-                {errMessage && 
-                <ErrorMessage
-                message={errMessage}/>}
+        <>
+            <TabularNav
+            links={[
+                {
+                    text: 'Movie',
+                    to: `/admin/movies/edit/${id}`
+                }
+            ]}/>
+            <div className="max-w-2xl p-10">
                 {isFetching &&
                 <div>Loading...</div>
                 }
                 {movieToEdit && !isFetching &&
-                    <form>
-                        <div className="mb-7">
+                    <form autoComplete="off">
+                        <div>
                             <h1 className="text-2xl mb-6 text-slate-800 font-medium">Edit Movie</h1>
+                            {errMessage && 
+                                <ErrorMessage
+                                message={errMessage}/>
+                            }
                             <Input
                             fieldType="text"
                             fieldName="Title" 
@@ -191,6 +248,20 @@ const EditMovie = () => {
                             value={formData.director}
                             />
 
+                            <SelectAjax 
+                            fieldName="Cast"
+                            name="cast"
+                            id="cast"
+                            required={false}
+                            setData={handleSetCast}
+                            data={formData.cast}
+                            reqFunc={(value) => request(
+                                `${BASE_URL}/actors?searchQuery=${value}`,
+                                null,
+                                {}
+                            )}
+                            />
+
                             <div className="flex justify-end w-full py-8">
                                 <Button
                                 size='medium'
@@ -204,7 +275,7 @@ const EditMovie = () => {
                         </div>
                     </form>}
                 </div>
-            </section>
+            </>
     )
 }
 

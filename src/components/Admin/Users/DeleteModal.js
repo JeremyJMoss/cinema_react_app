@@ -27,6 +27,7 @@ const DeleteModal = ({deleteId, setDeleteId, onDelete, baseRoute}) => {
         setErrMessage
     } = useFetch(sendFetch, null)
 
+
     useEffect(() => {
         const handleEscapeModal = (e) => {
             if (e.key === 'Escape'){
@@ -93,6 +94,7 @@ const DeleteModal = ({deleteId, setDeleteId, onDelete, baseRoute}) => {
                     <p className="mb-5 text-center">
                     {baseRoute === '/user' && `Are you sure you wish to delete ${entityToDelete.first_name} ${entityToDelete.last_name} with email ${entityToDelete.email}?`}
                     {baseRoute === '/movie' && `Are you sure you wish to delete ${entityToDelete.title}?`}
+                    {baseRoute === '/cinema' && `Are you sure you wish to delete ${entityToDelete.name}?`}
                     </p> 
                     <div className="flex gap-5">
                         <Button

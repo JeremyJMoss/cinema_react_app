@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import homeIcon from "../assets/icons8-home.png";
 import userIcon from "../assets/icons8-user.png";
 import movieIcon from "../assets/icons8-movie.png";
+import cinemaIcon from "../assets/icons8-cinema.png";
 import AdminLink from '../components/Admin/AdminLink';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -30,6 +31,11 @@ const AdminRoot = () => {
           label="Movies"
           href="/admin/movies"
           icon={movieIcon}
+          />
+          <AdminLink
+          label="Cinemas"
+          href="/admin/cinemas"
+          icon={cinemaIcon}
           />
           <AdminLink
           label="Users"

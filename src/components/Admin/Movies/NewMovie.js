@@ -3,17 +3,18 @@ import { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { RATINGS, BASE_URL } from "../../../config/constants";
 import Select from "../../UI/Select";
+import SelectAjax from "../../UI/SelectAjax";
 import Button from "../../UI/Buttons/Button";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../UI/ErrorMessage";
 import { request } from "../../../util/http";
 import CoverArtInput from "../CoverArtInput";
+import TabularNav from "../../UI/TabularNav";
 
 const NewMovie = () => {
     const { token, logout } = useAuth();
     const navigate = useNavigate();
     const [errMessage, setErrMessage] = useState('');
-
     const [formData, setFormData] = useState({
         title: '',
         summary: '',
@@ -21,11 +22,13 @@ const NewMovie = () => {
         release_date: '',
         rating: 'G',
         cover_art: null,
-        director: ''
+        director: '',
+        cast: []
     });
 
     const [uploadPreview, setUploadPreview] = useState(null);
     const [fileName, setFileName] = useState('');
+    const [newCastCount, setNewCastCount] = useState(0);
 
     const handleFieldChange = (fieldName, value) => {
         setFormData(prevData => ({
@@ -39,7 +42,7 @@ const NewMovie = () => {
             const file = e.target.files[0];
             const { name: fileName, size } = file;
             const fileSize = (size / 1000).toFixed(2);
-            const fileNameAndSize = `${fileName} - ${fileSize}KB`;
+            const fileNameAndSize = `${fileName} - ${fileSize} KB`;
             setFileName(fileNameAndSize);
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -59,7 +62,18 @@ const NewMovie = () => {
         const postData = async () => {
             const formDataToSend = new FormData();
             for (const [name, value] of Object.entries(formData)){
-                formDataToSend.append(name, value);
+                if (name === 'cast'){
+                    value.forEach(member => {
+                        // remove new actor id's so they can be created on the server, id's only used for key attribute
+                        if (typeof member.id === "string"){
+                            delete member.id;
+                        }
+                    })
+                    formDataToSend.append(name, JSON.stringify(value))
+                }
+                else{
+                    formDataToSend.append(name, value);
+                }
             }
             try {
                 await request(`${BASE_URL}/movie`,
@@ -71,6 +85,7 @@ const NewMovie = () => {
                     formDataToSend
                 );
                 setErrMessage('');
+                setNewCastCount(0);
                 navigate('/admin/movies');
             } catch(error){
                 setErrMessage(error.message);
@@ -80,14 +95,54 @@ const NewMovie = () => {
         postData();
     }
 
+    const handleSetCast = (castMember, isDelete = false) => {
+        // for adding cast member to list of cast
+        if (!isDelete){
+            if (!castMember.id){
+                // add new cast id to new tags for key attribute react rendering
+                castMember.id = `new${newCastCount}`;
+                setNewCastCount(prev => ++prev);
+            }
+            setFormData(prev => {
+                return { 
+                    ...prev,
+                    cast: [
+                        ...prev.cast,
+                        castMember
+                    ]
+                }
+            })
+            return;
+        }
+        // when deleting cast member from list
+        setFormData(prev => {
+            return {
+                ...prev,
+                cast: [
+                    ...prev.cast.filter(actor => {
+                    return actor.id !== castMember.id;
+                    })
+                ]
+            }
+        })
+    }
+
     return (
-        <section className="p-10 w-full h-full">
-            <div className="max-w-lg">
-                {errMessage && 
-                <ErrorMessage
-                message={errMessage}/>}
-                <div className="mb-7">
+        <>
+            <TabularNav
+            links={[
+                {
+                    text: 'Movie',
+                    to: '/admin/movies/new'
+                }
+            ]}/>
+            <div className="max-w-2xl p-10">
+                <form>
                     <h1 className="text-2xl mb-6 text-slate-800 font-medium">Create New Movie</h1>
+                    {errMessage && 
+                        <ErrorMessage
+                        message={errMessage}/>
+                    }
                     <Input
                     fieldType="text"
                     fieldName="Title" 
@@ -155,6 +210,20 @@ const NewMovie = () => {
                     value={formData.director}
                     />
 
+                    <SelectAjax 
+                    fieldName="Cast"
+                    name="cast"
+                    id="cast"
+                    required={false}
+                    setData={handleSetCast}
+                    data={formData.cast}
+                    reqFunc={(value) => request(
+                        `${BASE_URL}/actors?searchQuery=${value}`,
+                        null,
+                        {}
+                    )}
+                    />
+
                     <div className="flex justify-end w-full py-8">
                         <Button
                         size='medium'
@@ -165,9 +234,9 @@ const NewMovie = () => {
                             Create
                         </Button>
                     </div>
-                </div>
+                </form>
             </div>
-        </section>
+        </>
     )
 }
 
