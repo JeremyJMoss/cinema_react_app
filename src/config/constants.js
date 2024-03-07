@@ -33,3 +33,22 @@ export const RATINGS = [
         value: 'R18+'
     }
 ]
+
+export const THEATRE_TYPES = [
+    {
+        text: 'Gold Class',
+        value: 'Gold Class'
+    },
+    {
+        text: 'Standard',
+        value: 'Standard'
+    },
+    {
+        text: 'V-Max',
+        value: 'V-Max'
+    },
+    {
+        text: 'Drive-In',
+        value: 'Drive-In'
+    }
+]

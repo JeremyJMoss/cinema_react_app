@@ -15,6 +15,10 @@ import SingleMovie from './components/FrontPages/SingleMovie';
 import Cinemas from './components/Admin/Cinemas/Cinemas';
 import EditCinema from './components/Admin/Cinemas/EditCinema';
 import Theatres from './components/Admin/Cinemas/Theatres';
+import NewCinema from './components/Admin/Cinemas/NewCinema';
+import Sessions from './components/Admin/Sessions/Sessions';
+import NewSession from './components/Admin/Sessions/NewSession';
+import ViewSessions from './components/Admin/Sessions/ViewSessions';
 
 function App() {
 
@@ -39,8 +43,14 @@ function App() {
           </Route>
           <Route path='cinemas'>
             <Route index element={<Cinemas/>}/>
+            <Route path="new" element={<NewCinema/>}/>
             <Route path="edit/:id" element={<EditCinema/>}/>
             <Route path=":id/theatres" element={<Theatres/>}/>
+          </Route>
+          <Route path='sessions'>
+            <Route index element={<Sessions/>}/>
+            <Route path=":movie_id/new" element={<NewSession/>}/>
+            <Route path=":movie_id" element={<ViewSessions/>}/>
           </Route>
         </Route>
     ])

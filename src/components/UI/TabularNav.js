@@ -7,7 +7,8 @@ const TabularNav = ({links}) => {
         {links.map(link => {
             return (
                 <NavLink 
-                activeClassName="active" 
+                activeclassname="active"
+                key={link.to}
                 className="rounded-t-xl flex py-2 px-7"
                 to={link.to}>
                     <span>{link.text}</span>

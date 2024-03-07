@@ -20,14 +20,14 @@ const ArchiveHead = ({isFetching, newLink, title, errMessage, deleteModalId, set
             message={errMessage}/>}
             <div className="flex gap-2 items-center mb-8">
             <h2 className="text-2xl font-bold mr-6">{title}</h2>
-            <Button
+            {newLink && <Button
             type="button"
             colorStyling='primary'
             size="small"
             onClick={() => navigate(newLink)}
             >
                 Add New
-            </Button>
+            </Button>}
             </div>
             {isFetching && <div>Loading...</div>}
         </>

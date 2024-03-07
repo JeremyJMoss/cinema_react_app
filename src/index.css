@@ -41,7 +41,7 @@ table {
 }
 
 .top-tabs a.active {
-    background-color: white;
+    background-color: rgb(241 245 249);
 }
 
 .top-tabs a {
@@ -102,7 +102,7 @@ table {
 }
 
 .top-tabs a.active span::before, .top-tabs a.active span::after {
-    background-color: white;
+    background-color: rgb(241 245 249);
 }
 
 

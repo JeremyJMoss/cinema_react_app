@@ -85,7 +85,7 @@ const SelectAjax = ({name, id, fieldName, required, setData, data, reqFunc}) => 
             <div className="relative w-full">
                 <input 
                 type='text'
-                className="py-2 px-5 mb-3 text-lg border-2 rounded-md w-full"
+                className="py-2 px-5 mb-3 text-lg border-2 border-slate-300 rounded-md w-full"
                 name={name} 
                 id={id}
                 onChange={handleChange}
@@ -94,7 +94,7 @@ const SelectAjax = ({name, id, fieldName, required, setData, data, reqFunc}) => 
                 autoComplete="false"
                 />
                 {(matchingData.length > 0 || errMessage) &&
-                <div id="dropdown" className='w-full absolute bg-white border-x-2 border-t-2 rounded-t-md bottom-full'>
+                <div id="dropdown" className='w-full absolute bg-white border-x-2 border-t-2 border-slate-300 rounded-t-md bottom-full'>
                     {errMessage &&
                     <>
                         <p className="px-3 py-2 text-lg">{errMessage}!</p>

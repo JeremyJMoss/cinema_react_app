@@ -32,7 +32,7 @@ const Movies = () => {
   }
 
   return (
-    <div className="min-h-full h-auto w-full p-5 sm:p-10 relative bg-gray-100">
+    <div className="min-h-full h-auto w-full p-5 sm:p-10 relative">
       <ArchiveHead
       deleteModalId={deleteModalId}
       setDeleteModalId={setDeleteModalId}

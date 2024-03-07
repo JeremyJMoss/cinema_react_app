@@ -8,16 +8,16 @@ const Select = ({options, id, name, label, required, onFieldChange, value}) => {
 
     return (
         <div className="flex flex-col mb-3">
-            <label htmlFor={id} className="mb-4 text-md sm:text-lg">
+            {label && <label htmlFor={id} className="mb-4 text-md sm:text-lg">
                 {label}{required && <span className="text-red-500"> *</span>}
-            </label>
+            </label>}
             <select
             name={name}
             id={id}
             onChange={handleChange}
             required={required}
             value={value}
-            className='py-2 px-5 appearance-none text-md sm:text-lg bg-white border-2 rounded-md'
+            className='py-2 px-5 appearance-none text-md sm:text-lg bg-white border-2 border-slate-300 rounded-md'
             >
                 {options && options.length > 0 &&
                     options.map((opt) => <option key={opt.value} value={opt.value}>{opt.text}</option>)
