@@ -1,7 +1,7 @@
 import Button from "../UI/Buttons/Button"
 import { useNavigate } from "react-router-dom"
 
-const ArchiveTable = ({information, onHandleDeleteModal, editBaseRoute, isSession}) => {
+const ArchiveTable = ({ information, onHandleDeleteModal, editBaseRoute }) => {
     const navigate = useNavigate();
 
     return (
@@ -23,40 +23,18 @@ const ArchiveTable = ({information, onHandleDeleteModal, editBaseRoute, isSessio
                     })}
                     <td className='h-full'>
                         <div className="flex gap-3 px-5 py-3">
-                            {!isSession && 
-                            <>
-                                <Button
-                                colorStyling="secondary"
-                                size="medium"
-                                onClick={() => navigate(`/admin${editBaseRoute}/edit/${obj.id}`)}>
-                                    Edit
-                                </Button>
-                                <Button
-                                onClick={() => onHandleDeleteModal(obj.id)}
-                                colorStyling="accent"
-                                size="medium">
-                                    Delete    
-                                </Button>
-                            </>
-                            }
-                            {isSession &&
-                            <>
-                                <Button
-                                colorStyling="primary"
-                                size="small"
-                                onClick={() => navigate(`/admin/sessions/${obj.id}/new`)}
-                                >
-                                    New Session
-                                </Button>
-                                <Button
-                                colorStyling="secondary"
-                                size="small"
-                                onClick={() => navigate(`/admin/sessions/${obj.id}`)}
-                                >
-                                    View Sessions
-                                </Button>
-                            </>
-                            }
+                            <Button
+                            colorStyling="secondary"
+                            size="medium"
+                            onClick={() => navigate(`/admin${editBaseRoute}/edit/${obj.id}`)}>
+                                Edit
+                            </Button>
+                            <Button
+                            onClick={() => onHandleDeleteModal(obj.id)}
+                            colorStyling="accent"
+                            size="medium">
+                                Delete    
+                            </Button>
                         </div>
                     </td>
                 </tr>

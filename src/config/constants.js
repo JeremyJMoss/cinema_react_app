@@ -52,3 +52,14 @@ export const THEATRE_TYPES = [
         value: 'Drive-In'
     }
 ]
+
+export const TIMES = Array.from({length: 48}).map((_, index) => {
+    const hour = String((Math.floor(index / 2))).padStart(2, '0');
+    const minutes = index % 2 === 0 ? '00' : '30';
+    const time = `${hour}:${minutes}`;
+    return {
+        text: time,
+        value: time,
+        disabled: false
+    }
+})

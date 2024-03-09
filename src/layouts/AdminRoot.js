@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import homeIcon from "../assets/icons8-home.png";
 import userIcon from "../assets/icons8-user.png";

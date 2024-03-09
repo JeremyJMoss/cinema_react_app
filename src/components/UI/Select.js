@@ -1,5 +1,3 @@
-
-
 const Select = ({options, id, name, label, required, onFieldChange, value}) => {
     const handleChange = (event) => {
         const { value } = event.target;
@@ -20,7 +18,7 @@ const Select = ({options, id, name, label, required, onFieldChange, value}) => {
             className='py-2 px-5 appearance-none text-md sm:text-lg bg-white border-2 border-slate-300 rounded-md'
             >
                 {options && options.length > 0 &&
-                    options.map((opt) => <option key={opt.value} value={opt.value}>{opt.text}</option>)
+                    options.map((opt) => <option key={opt.value} value={opt.value} disabled={opt.disabled}>{opt.text}</option>)
                 }
             </select>
         </div>

@@ -109,6 +109,10 @@ const EditCinema = () => {
                 {
                     text: 'Theatres',
                     to: `/admin/cinemas/${id}/theatres`
+                },
+                {
+                    text: 'Sessions',
+                    to: `/admin/cinemas/${id}/sessions`
                 }
             ]}/>
             <div className="max-w-2xl p-10">

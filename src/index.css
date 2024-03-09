@@ -50,6 +50,7 @@ table {
 
 .top-tabs a:last-child::after, .top-tabs a:last-child::before,
 .top-tabs a:first-child::after, .top-tabs a:first-child::before,
+.top-tabs a::before, .top-tabs a::after,
 .top-tabs a span::before, .top-tabs a span::after, .top-tabs a.active span::before, .top-tabs a.active span::after {
     content: '';
     position: absolute;
@@ -103,6 +104,22 @@ table {
 
 .top-tabs a.active span::before, .top-tabs a.active span::after {
     background-color: rgb(241 245 249);
+}
+
+form .react-datepicker__input-container {
+    width: 100%;
+    display: flex;
+    margin-bottom: 0.75rem;
+}
+
+form .react-datepicker__input-container input {
+    width: 100%;
+    padding-inline: 1.25rem;
+    padding-block: 0.5rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    border-radius: 0.375rem;
+    border: 2px solid rgb(203 213 225);
 }
 
 

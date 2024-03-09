@@ -181,6 +181,10 @@ const Theatres = () => {
                 {
                     text: 'Theatres',
                     to: `/admin/cinemas/${id}/theatres`
+                },
+                {
+                    text: 'Sessions',
+                    to: `/admin/cinemas/${id}/sessions`
                 }
             ]}/>
             <div className="max-w-lg p-10">

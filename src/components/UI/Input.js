@@ -1,4 +1,4 @@
-const Input = ({fieldType, fieldName, name, id, required, onFieldChange, value, onKeyDown}) => {
+const Input = ({fieldType, fieldName, name, required, onFieldChange, ...props}) => {
     const handleChange = (event) => {
         const { value } = event.target;
         if (onFieldChange){
@@ -17,21 +17,18 @@ const Input = ({fieldType, fieldName, name, id, required, onFieldChange, value, 
             {fieldType !== 'textarea' &&
             <input 
             type={fieldType}
+            name={name}
             className="py-2 px-5 mb-3 text-lg border-2 border-slate-300 rounded-md"
-            name={name} 
-            id={id}
             onChange={handleChange}
-            onKeyDown={onKeyDown}
-            value={value}/>}
+            {...props}/>
+            }
             {fieldType === 'textarea' &&
             <textarea
-            className="py-2 px-5 mb-3 text-lg border-2 rounded-md"
-            id={id} 
             name={name}
+            className="py-2 px-5 mb-3 text-lg border-2 rounded-md"
             onChange={handleChange}
-            onKeyDown={onKeyDown}
             rows="6"
-            value={value}
+            {...props}
             >
             </textarea>}
         </div>

@@ -9,7 +9,7 @@ import { request } from "../../../util/http";
 import { useParams, useNavigate } from "react-router-dom";
 import { useFetch } from "../../../hooks/useFetch";
 import CoverArtInput from "../CoverArtInput";
-import SelectAjax from "../../UI/SelectAjax";
+import MultiSelectAjax from "../../UI/MultiSelectAjax";
 import TabularNav from "../../UI/TabularNav";
 
 const EditMovie = () => {
@@ -248,7 +248,7 @@ const EditMovie = () => {
                             value={formData.director}
                             />
 
-                            <SelectAjax 
+                            <MultiSelectAjax 
                             fieldName="Cast"
                             name="cast"
                             id="cast"

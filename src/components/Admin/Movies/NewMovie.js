@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { RATINGS, BASE_URL } from "../../../config/constants";
 import Select from "../../UI/Select";
-import SelectAjax from "../../UI/SelectAjax";
+import MultiSelectAjax from "../../UI/MultiSelectAjax";
 import Button from "../../UI/Buttons/Button";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../UI/ErrorMessage";
@@ -210,7 +210,7 @@ const NewMovie = () => {
                     value={formData.director}
                     />
 
-                    <SelectAjax 
+                    <MultiSelectAjax 
                     fieldName="Cast"
                     name="cast"
                     id="cast"
