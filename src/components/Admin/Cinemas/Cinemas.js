@@ -4,7 +4,6 @@ import { BASE_URL } from '../../../config/constants';
 import { useAuth } from '../../../context/AuthContext';
 import { useFetch } from '../../../hooks/useFetch';
 import { request } from '../../../util/http';
-import ArchiveCards from "../ArchiveCards";
 import ArchiveTable from "../ArchiveTable";
 
 const Cinemas = () => {
@@ -49,17 +48,6 @@ const Cinemas = () => {
             baseRoute='/cinema'
             isFetching={isFetching}/>
             {!errMessage && !isFetching && cinemas?.length > 0 &&
-            <>
-            <ArchiveCards
-            information={cinemas.map((cinema) => {
-            return {
-                id: cinema.id,
-                data: cinema.name,
-            }
-            })}
-            label="Name"
-            onHandleDeleteModal={handleDeleteModal}
-            editBaseRoute='/cinemas'/>
             <ArchiveTable
             information={{
             labels: [
@@ -79,7 +67,7 @@ const Cinemas = () => {
             onHandleDeleteModal={handleDeleteModal}
             editBaseRoute='/cinemas'
             />
-            </>}
+            }
         </div>
     )
 }

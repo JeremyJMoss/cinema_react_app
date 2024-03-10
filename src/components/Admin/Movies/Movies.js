@@ -3,7 +3,6 @@ import { BASE_URL } from "../../../config/constants";
 import { request } from "../../../util/http";
 import { useFetch } from "../../../hooks/useFetch";
 import ArchiveHead from "../ArchiveHead";
-import ArchiveCards from "../ArchiveCards";
 import ArchiveTable from "../ArchiveTable";
 
 const Movies = () => {
@@ -43,17 +42,6 @@ const Movies = () => {
       baseRoute='/movie'
       isFetching={isFetching}/>
       {!errMessage && !isFetching && data?.movies?.length > 0 &&
-      <>
-        <ArchiveCards
-        information={data.movies.map((movie) => {
-          return {
-            id: movie.id,
-            data: movie.title
-          }
-        })}
-        label="Title"
-        onHandleDeleteModal={handleDeleteModal}
-        editBaseRoute="/movies"/>
         <ArchiveTable
         information={{
           labels: [
@@ -75,7 +63,6 @@ const Movies = () => {
         onHandleDeleteModal={handleDeleteModal}
         editBaseRoute='/movies'
         />
-      </>
       }
     </div>
   )

@@ -15,7 +15,8 @@ const Select = ({options, id, name, label, required, onFieldChange, value}) => {
             onChange={handleChange}
             required={required}
             value={value}
-            className='py-2 px-5 appearance-none text-md sm:text-lg bg-white border-2 border-slate-300 rounded-md'
+            aria-required={required}
+            className='py-2 px-5 text-md appearance-none sm:text-lg bg-white border-2 border-slate-300 rounded-md'
             >
                 {options && options.length > 0 &&
                     options.map((opt) => <option key={opt.value} value={opt.value} disabled={opt.disabled}>{opt.text}</option>)

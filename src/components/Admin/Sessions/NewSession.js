@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import TabularNav from "../../UI/TabularNav";
 import Select from "../../UI/Select";
 import { TIMES } from "../../../config/constants";
@@ -16,6 +16,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const NewSession = () => {
     const { cinema_id, theatre_id } = useParams();
     const { logout, token } = useAuth();
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         session_time: '0:00',
@@ -41,22 +42,24 @@ const NewSession = () => {
         const base_down_time = value.run_time + 15;
         const remaining_time = base_down_time % 30;
         const down_time = base_down_time + 30 - remaining_time;
+        const intervals = down_time / 30 - 1; 
         setTimeOptions(prev => {
-            return prev.map((option, index) => {
+            return prev.map((option, index) => { 
                 if (option.disabled){
                     return option;
                 }
                 
-                const intervals = down_time / 30 - 1;
+                const newOption = {...option};
 
                 for (let i = 1; i <= intervals; i++){
                     const newIndex = index + i;
-                    if (newIndex < 48 && prev[newIndex].disabled){
-                        option.disabled = true;
+                    if (newIndex < prev.length && prev[newIndex].disabled){
+                        newOption.disabled = true;
+                        break;
                     }
                 }
 
-                return option;
+                return newOption;
             })
         })
         setFormData(prev => {
@@ -72,6 +75,7 @@ const NewSession = () => {
     }
 
     const handleChangeDate = (date) => {
+        // research
         setFormData(prev => {
             return {
                 ...prev,
@@ -86,37 +90,26 @@ const NewSession = () => {
                 null,
                 {});
 
-                if (response.length > 0) {
-                    let session_times = TIMES;
+                // set session times back to normal options array with no disabled times
+                let session_times = TIMES;
 
+                if (response.length > 0) {
+                    // loop through each session and disable session times that are out of bounds
                     response.forEach(session => {
                         const startIndex = TIMES.findIndex((option) => session.session_start_time === option.value);
                         const endIndex = TIMES.findIndex((option) => session.session_end_time === option.value);
                         const session_start_date = new Date(session.session_start_date);
                         const session_end_date = new Date(session.session_start_date);
 
-
                         if (session_end_date > session_start_date) {
-                            session_times = session_times.map((option, index) => {
-                                    if (index >= startIndex){
-                                        option.disabled = true;
-                                    }
-                                    return option;  
-                            })
+                            session_times = session_times.map((option, index) => index >= startIndex ? {...option, disabled: true} : option )
                         }
                         else {
-                            session_times = session_times.map((option, index) =>{
-                                if (index >= startIndex && index <= endIndex){
-                                    option.disabled = true;
-                                }
-                                return option;
-                            })
+                            session_times = session_times.map((option, index) => index >= startIndex && index <= endIndex ? { ...option, disabled: true } : option );
                         }
-
                     });
-
-                    setTimeOptions(session_times);
                 }
+                setTimeOptions(session_times);
             }
             catch (error) {
                 console.log(error);
@@ -140,7 +133,7 @@ const NewSession = () => {
     const handleSubmit = () => {
         const sendData = async () => {
             try {
-                const result = await request(`${BASE_URL}/session`,
+                await request(`${BASE_URL}/session`,
                 logout,
                 {
                     'Authorization': `Bearer ${token}`,
@@ -154,7 +147,7 @@ const NewSession = () => {
                     movie_id: formData.movie_id
                 }))
 
-                console.log(result);
+                navigate(`/admin/cinemas/${cinema_id}/sessions`)
             }
             catch (error) {
                 console.log(error);

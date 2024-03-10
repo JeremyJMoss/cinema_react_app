@@ -4,7 +4,6 @@ import { useAuth } from '../../../context/AuthContext';
 import ArchiveHead from '../ArchiveHead';
 import { useFetch } from '../../../hooks/useFetch';
 import { request } from '../../../util/http';
-import ArchiveCards from '../ArchiveCards';
 import { toTitleCase } from '../../../util/util';
 import ArchiveTable from '../ArchiveTable';
 
@@ -50,16 +49,6 @@ const Users = () => {
       baseRoute='/user'
       isFetching={isFetching}/>
       {!errMessage && !isFetching && users?.length > 0 &&
-      <>
-        <ArchiveCards
-        information={users.map((user) => {
-          return {
-            id: user.id,
-            data: user.email,
-          }
-        })}
-        label="Email"
-        onHandleDeleteModal={handleDeleteModal}/>
         <ArchiveTable
         information={{
           labels: [
@@ -80,8 +69,7 @@ const Users = () => {
         }}
         onHandleDeleteModal={handleDeleteModal}
         editBaseRoute='/users'
-        />
-      </>}
+        />}
     </div>
   )
 }
