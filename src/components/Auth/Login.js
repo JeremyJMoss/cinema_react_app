@@ -147,8 +147,8 @@ function Login({setModalClose}) {
                     onKeyDown={handleKeyDown}
                     />
                 </div>
-                <div className="w-full flex justify-between items-center p-6 mt-auto">
-                    <Link to="/signup">New User? Sign up here.</Link>
+                <div className="w-full flex justify-between items-center p-6">
+                    <Link to="/signup" onClick={setModalClose}>New User? <span className="underline">Sign up here.</span></Link>
                     <Button 
                     colorStyling='accent'
                     size='medium'

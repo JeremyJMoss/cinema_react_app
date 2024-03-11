@@ -14,9 +14,14 @@ const Root = () => {
         setHamburgerMenuHidden(prev => !prev)
     }
 
+    const handleClickLoginInHamburger = () => {
+        toggleLoginModal();
+        setHamburgerMenuHidden(prev => !prev);
+    }
+
     return (
         <>
-            <header className="flex w-full justify-between items-center px-10 py-5">
+            <header className="flex w-full justify-between items-center px-3 md:px-10 py-5">
                 <div>
                     <Link to="/">
                         <img className="md:w-32 w-24" alt="Flick and Find Logo" src={flickfind_logo} />
@@ -44,14 +49,15 @@ const Root = () => {
                         Logout
                     </Button>}
                 </menu>
-                <div className={`absolute w-full h-full top-0 right-0 backdrop sm:hidden ${hamburgerMenuHidden ? 'hidden' : 'block'}`} onClick={toggleMenu}>
+                <div className={`absolute w-full h-full top-0 right-0 bg-stone-900/90 sm:hidden ${hamburgerMenuHidden ? 'hidden' : 'block'}`} onClick={toggleMenu}>
                     <menu onClick={(e) => e.stopPropagation()} className="absolute top-0 right-0 px-8 py-6 bg-green-200 h-full flex-col flex">
                         {user && user.isAdmin && <Link to="/admin" className="decoration-none text-lg md:text-xl text-black-800 font-medium">Admin</Link>}
+                        {!token && !user && <div role="button" className="text-lg md:text-xl text-black-800 font-medium" onClick={handleClickLoginInHamburger}>Login</div>}
                     </menu>
                 </div>
             </header>
             {showLoginModal && <Login setModalClose={toggleLoginModal}/>}
-            <main className="px-8 py-4">
+            <main className="px-3 md:px-8 py-4">
                 <Outlet/>
             </main>
         </>
