@@ -1,8 +1,8 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import TabularNav from "../../UI/TabularNav";
 import Select from "../../UI/Select";
 import { TIMES } from "../../../config/constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { request } from "../../../util/http";
 import SelectAjax from "../../UI/SelectAjax";
 import { BASE_URL } from "../../../config/constants";
@@ -14,27 +14,72 @@ import { formatDate } from "../../../util/util";
 import "react-datepicker/dist/react-datepicker.css";
 
 const NewSession = () => {
-    const { cinema_id, theatre_id } = useParams();
     const { logout, token } = useAuth();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
+        theatre_id: null,
         session_time: '0:00',
         session_date: null,
-        movie_id: '',
-        theatre_down_time: null
+        movie_id: ''
     });
 
     const [timeOptions, setTimeOptions] = useState(TIMES);
     const [searchText, setSearchText] = useState('');
+    const [ theatres, setTheatres ] = useState([]);
+
+    useEffect(() => {
+        const sendFetch = async () => {
+            try{
+                const response = await request( `${BASE_URL}/theatres`,
+                null,
+                []);
+
+                if (!response.length > 0){
+                    setTheatres([]);
+                }
+
+                const theatre_array = response.map(theatre => {
+                    return {
+                        value: theatre.id,
+                        text: `Theatre ${theatre.number}`
+                    }
+                })
+
+                setFormData({
+                    theatre_id: theatre_array[0],
+                    session_time: '0:00',
+                    session_date: null,
+                    movie_id: ''
+                })
+
+                setTheatres(theatre_array);
+
+            }
+            catch (error) {
+                console.log(error);
+            }
+
+        }
+
+        sendFetch()
+    }, [])
 
     const handleFieldChange = (fieldName, value) => {
-            setFormData(prev => {
-                return {
-                    ...prev,
-                    [fieldName]: value
-                }
+        if (fieldName === 'theatre_id'){
+            return setFormData({
+                theatre_id: value,
+                session_time: '0:00',
+                session_date: null,
+                movie_id: ''
             })
+        }
+        setFormData(prev => {
+            return {
+                ...prev,
+                [fieldName]: value
+            }
+        })
     }
 
     const handleSetMovieId = (value) => {
@@ -86,7 +131,7 @@ const NewSession = () => {
         const getSessions = async () => {
             
             try {
-                const response = await request(`${BASE_URL}/sessions?theatre_id=${theatre_id}&session_date=${formatDate(date)}`,
+                const response = await request(`${BASE_URL}/sessions?theatre_id=${formData.theatre_id}&session_date=${formatDate(date)}`,
                 null,
                 {});
 
@@ -141,13 +186,13 @@ const NewSession = () => {
                 },
                 'POST',
                 JSON.stringify({
-                    theatre_id,
+                    theatre_id: formData.theatre_id,
                     session_time: formData.session_time,
                     session_date: formatDate(formData.session_date),
                     movie_id: formData.movie_id
                 }))
 
-                navigate(`/admin/cinemas/${cinema_id}/sessions`)
+                navigate(`/admin/sessions`)
             }
             catch (error) {
                 console.log(error);
@@ -163,22 +208,24 @@ const NewSession = () => {
             <TabularNav
             links={[
                 {
-                    text: 'Cinema',
-                    to: `/admin/cinemas/edit/${cinema_id}`
-                },
-                {
-                    text: 'Theatres',
-                    to: `/admin/cinemas/${cinema_id}/theatres`
-                },
-                {
                     text: 'Sessions',
-                    to: `/admin/cinemas/${cinema_id}/sessions`
-                }
+                    to: `/admin/sessions/new`
+                },
             ]}/>
             <div className="max-w-lg p-10">
                 <form>
                     <h1 className="text-2xl mb-6 text-slate-800 font-medium">Create New Session</h1>
-                    <div className='flex grow flex-col'>
+                    {theatres && 
+                    <Select
+                    label="Theatre Number"
+                    name="theatre_id"
+                    id="theatre_number"
+                    onFieldChange={handleFieldChange}
+                    value={formData.theatre_id}
+                    required={true}
+                    options={theatres}
+                    />}
+                    {formData.theatre_id && <div className='flex grow flex-col'>
                         <label className="mb-3 sm:text-lg" htmlFor="session_date">Session Date <span className="text-red-500">*</span></label>
                         <DatePicker
                         id="session_date"
@@ -190,8 +237,9 @@ const NewSession = () => {
                         onChange={handleChangeDate}
                         dateFormat="dd/MM/yyyy"
                         />
-                    </div>
-                    {formData.session_date && <SelectAjax
+                    </div>}
+                    {formData.session_date && 
+                    <SelectAjax
                     reqFunc={(value) => request(
                         `${BASE_URL}/movies/search?searchQuery=${value}`,
                         null,
@@ -206,7 +254,8 @@ const NewSession = () => {
                     setSearchText={setSearchText}
                     searchText={searchText}
                     />}
-                    {formData.session_date && formData.movie_id && <Select
+                    {formData.session_date && formData.movie_id && 
+                    <Select
                     label="Session Time"
                     options={timeOptions}
                     name="session_time"

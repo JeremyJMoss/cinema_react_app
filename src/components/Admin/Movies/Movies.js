@@ -6,7 +6,7 @@ import ArchiveHead from "../ArchiveHead";
 import ArchiveTable from "../ArchiveTable";
 
 const Movies = () => {
-  const [deleteModalId, setDeleteModalId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
 
   const sendFetch = useCallback(
     async () => await request(`${BASE_URL}/movies`, 
@@ -22,24 +22,29 @@ const Movies = () => {
   } = useFetch(sendFetch,[])
 
   const handleDelete = (id) => {
-    setDeleteModalId(null);
+    setDeleteId(null);
     setMovies(prev => prev.movies.filter((movie) => movie.id !== id));
   }
 
   const handleDeleteModal = (id) => {
-    setDeleteModalId(id);
+    setDeleteId(id);
+  }
+
+  const outputDeleteText = (entityToDelete) => {
+    return `Are you sure you wish to delete ${entityToDelete.title}?`;
   }
 
   return (
     <div className="min-h-full h-auto w-full p-5 sm:p-10 relative">
       <ArchiveHead
-      deleteModalId={deleteModalId}
-      setDeleteModalId={setDeleteModalId}
+      deleteModalId={deleteId}
+      setDeleteModalId={setDeleteId}
       title="Movies"
       newLink='/admin/movies/new'
       handleDelete={handleDelete}
       errMessage={errMessage}
-      baseRoute='/movie'
+      deleteUrl={`${BASE_URL}/movie/${deleteId}`}
+      outputDeleteText={outputDeleteText}
       isFetching={isFetching}/>
       {!errMessage && !isFetching && data?.movies?.length > 0 &&
         <ArchiveTable

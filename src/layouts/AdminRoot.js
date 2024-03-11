@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import homeIcon from "../assets/icons8-home.png";
 import userIcon from "../assets/icons8-user.png";
 import movieIcon from "../assets/icons8-movie.png";
-import cinemaIcon from "../assets/icons8-cinema.png";
+import theatreIcon from "../assets/icons8-cinema.png";
 import sessionIcon from "../assets/icons8-session.png";
 import AdminLink from '../components/Admin/AdminLink';
 import Button from '../components/UI/Buttons/Button';
@@ -40,9 +40,9 @@ const AdminRoot = () => {
           icon={sessionIcon}
           href="/admin/sessions"/>
           <AdminLink
-          label="Cinemas"
-          href="/admin/cinemas"
-          icon={cinemaIcon}
+          label="Theatres"
+          icon={theatreIcon}
+          href="/admin/theatres"
           />
           <AdminLink
           label="Users"

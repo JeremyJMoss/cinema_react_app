@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import Button from "../../UI/Buttons/Button";
 import { useState, useEffect } from "react";
 import TabularNav from "../../UI/TabularNav";
@@ -10,13 +9,12 @@ import { request } from "../../../util/http";
 import { useAuth } from "../../../context/AuthContext";
 
 const Theatres = () => {
-    const {id} = useParams();
     const {logout, token} = useAuth();
     const [formOpen, setFormOpen] = useState(false);
     const [editId, setEditId] = useState(null);
     const [formData, setFormData] = useState({
-        theatre_number: '',
-        theatre_type: 'Standard'
+        number: '',
+        type: 'Standard'
     });
     const [errMessage, setErrMessage] = useState('');
     const [theatres, setTheatres] = useState([]);
@@ -25,7 +23,7 @@ const Theatres = () => {
     useEffect(() => {
         const fetchTheatres = async () => {
             try {
-                const response = await request(`${BASE_URL}/theatres/${id}`,
+                const response = await request(`${BASE_URL}/theatres`,
                 null,
                 {})
                 setTheatres(response);
@@ -37,7 +35,7 @@ const Theatres = () => {
         }
 
         fetchTheatres();
-    }, [id])
+    }, [])
 
     const openForm = () => {
         setFormOpen(true);
@@ -53,19 +51,19 @@ const Theatres = () => {
     const handleCancel = () => {
         setFormOpen(false);
         setFormData({
-            theatre_number: '',
-            theatre_type: 'Standard'
+            number: '',
+            type: 'Standard'
         });
         setErrMessage('');
     }
 
     const handleSubmit = () => {
-        if (!formData.theatre_number){
+        if (!formData.number){
             setErrMessage('No theatre number added');
             return;
         }
         if (theatres.some(theatre => {
-            return theatre.theatre_number === formData.theatre_number;
+            return theatre.number === formData.number;
         })){
             setErrMessage('Theatre with that number already exists')
             return;
@@ -80,8 +78,7 @@ const Theatres = () => {
                     },
                     'POST',
                     JSON.stringify({
-                        ...formData,
-                        cinema_id: id
+                        ...formData
                     })
                 )
                 
@@ -90,8 +87,8 @@ const Theatres = () => {
                     formData
                 ])
                 setFormData({
-                    theatre_number: '',
-                    theatre_type: 'Standard'
+                    number: '',
+                    type: 'Standard'
                 });
                 setFormOpen(false);
                 setErrMessage('');
@@ -105,7 +102,7 @@ const Theatres = () => {
     }
 
     const handleEdit = (theatre_number, value) => {
-        const theatre = theatres.find(theatre => theatre.theatre_number === theatre_number);
+        const theatre = theatres.find(theatre => theatre.number === theatre_number);
 
         const editTheatre = async () => {
             try {
@@ -117,16 +114,15 @@ const Theatres = () => {
                     },
                     'PUT',
                     JSON.stringify({
-                        theatre_number,
-                        theatre_type: value,
-                        cinema_id: id,
+                        number: theatre_number,
+                        type: value
                     })
                 )
                 
                 setTheatres(prev => {
                     return prev.map(theatre => {
-                        if (theatre.theatre_number === theatre_number){
-                            theatre.theatre_type = value;
+                        if (theatre.number === theatre_number){
+                            theatre.type = value;
                         }
                         return theatre;
                     })
@@ -135,7 +131,7 @@ const Theatres = () => {
                 setFetchErrMessage('');
             }
             catch (error){
-                setFetchErrMessage("Error editing theatre");
+                setFetchErrMessage(error.message);
                 setEditId(null);
             }
         }
@@ -175,19 +171,11 @@ const Theatres = () => {
             <TabularNav
             links={[
                 {
-                    text: 'Cinema',
-                    to: `/admin/cinemas/edit/${id}`
-                },
-                {
                     text: 'Theatres',
-                    to: `/admin/cinemas/${id}/theatres`
-                },
-                {
-                    text: 'Sessions',
-                    to: `/admin/cinemas/${id}/sessions`
+                    to: `/admin/theatres`
                 }
             ]}/>
-            <div className="max-w-lg p-10">
+            <div className="p-10">
                 <div className="flex gap-6 items-center mb-6">
                     <h1 className="text-2xl text-slate-800 font-medium">Manage Theatres</h1>
                     {!formOpen && 
@@ -201,27 +189,27 @@ const Theatres = () => {
                     </div>}
                 </div>
                 {formOpen &&
-                <form className="mb-6">
+                <form className="mb-6 max-w-lg">
                     {errMessage &&
                         <ErrorMessage
                         message={errMessage}/>}
                     <Input
                     fieldType='number'
                     fieldName='Theatre Number'
-                    name='theatre_number'
-                    id='theatre_number'
+                    name='number'
+                    id='number'
                     required={true}
                     onFieldChange={handleFieldChange}
-                    value={formData.theatre_number}
+                    value={formData.number}
                     />
                     <Select
                     onFieldChange={handleFieldChange}
                     options={THEATRE_TYPES}
-                    name='theatre_type'
-                    id='theatre_type'
+                    name='type'
+                    id='type'
                     label="Theatre Type"
                     required={true}
-                    value={formData.theatre_type}
+                    value={formData.type}
                     />
                     <div className="flex justify-end mt-7 gap-4">
                         <Button
@@ -244,41 +232,44 @@ const Theatres = () => {
                 <ErrorMessage
                 message={fetchErrorMessage}/>}
                 {theatres.length > 0 &&
-                    theatres.map((theatre) => {
-                        return (
-                            <div className="bg-white rounded-lg grow shadow-lg p-8 mb-6 flex flex-col items-center justify-between" key={theatre.id}>
-                                <h2 className="text-2xl font-semibold">Theatre {theatre.theatre_number}</h2>
-                                {editId === theatre.id ?
-                                <div className="mt-4">
-                                    <Select 
-                                    options={THEATRE_TYPES}
-                                    name={theatre.theatre_number}
-                                    onFieldChange={handleEdit}
-                                    value={theatre.theatre_type}/>
-                                </div> :
-                                <p className="text-lg">
-                                    Category: <span className="font-medium">{theatre.theatre_type}</span>
-                                </p>
-                                }
-                                <div className="flex gap-4 mt-4">
-                                    <Button
-                                    colorStyling="secondary"
-                                    size="medium"
-                                    onClick={() => setEditId(theatre.id)}
-                                    >
-                                        Edit
-                                    </Button>
-                                    <Button
-                                    colorStyling="accent"
-                                    size="medium"
-                                    onClick={() => handleDelete(theatre.id)}
-                                    >
-                                        Delete
-                                    </Button>
+                    <div className="flex gap-8 flex-wrap">
+                        {theatres.sort((a, b) => a.number - b.number).map((theatre) => {
+                            return (
+                                <div className="bg-white rounded-lg shadow-lg px-10 p-8 flex flex-col items-center justify-between" key={theatre.id}>
+                                    <h2 className="text-2xl font-semibold mb-3">Theatre {theatre.number}</h2>
+                                    {editId === theatre.id ?
+                                    <div>
+                                        <Select 
+                                        options={THEATRE_TYPES}
+                                        name={theatre.number}
+                                        onFieldChange={handleEdit}
+                                        value={theatre.type}
+                                        />
+                                    </div> :
+                                    <p className="text-lg">
+                                        Category: <span className="font-medium">{theatre.type}</span>
+                                    </p>
+                                    }
+                                    <div className="flex gap-4 mt-5">
+                                        <Button
+                                        colorStyling="secondary"
+                                        size="medium"
+                                        onClick={() => setEditId(prev =>  prev ? null : theatre.id)}
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                        colorStyling="accent"
+                                        size="medium"
+                                        onClick={() => handleDelete(theatre.id)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        )
-                    })
+                            )
+                        })}
+                    </div>
                 }
             </div>
         </>

@@ -27,17 +27,9 @@ const EditSessions = () => {
             <TabularNav
             links={[
                 {
-                    text: 'Cinema',
-                    to: `/admin/cinemas/edit/${id}`
-                },
-                {
                     text: 'Theatres',
                     to: `/admin/cinemas/${id}/theatres`
                 },
-                {
-                    text: 'Sessions',
-                    to: `/admin/cinemas/${id}/sessions`
-                }
             ]}/>
             <div className="max-w-2xl p-10">
                 <h1 className="text-2xl mb-6 text-slate-800 font-medium">Manage Sessions</h1>

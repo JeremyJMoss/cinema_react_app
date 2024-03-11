@@ -3,7 +3,7 @@ import DeleteModal from "./Users/DeleteModal"
 import Button from "../UI/Buttons/Button"
 import { useNavigate } from "react-router-dom"
 
-const ArchiveHead = ({isFetching, newLink, title, errMessage, deleteModalId, setDeleteModalId, handleDelete, baseRoute}) => {
+const ArchiveHead = ({isFetching, newLink, title, errMessage, deleteModalId, setDeleteModalId, handleDelete, deleteUrl, outputDeleteText}) => {
     const navigate = useNavigate();
 
     return (
@@ -13,7 +13,9 @@ const ArchiveHead = ({isFetching, newLink, title, errMessage, deleteModalId, set
                 deleteId={deleteModalId}
                 setDeleteId={setDeleteModalId}
                 onDelete={handleDelete}
-                baseRoute={baseRoute}/>
+                outputDeleteText={outputDeleteText}
+                deleteUrl={deleteUrl}
+                />
             }
             {errMessage &&
             <ErrorMessage

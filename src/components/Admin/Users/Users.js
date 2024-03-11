@@ -8,7 +8,7 @@ import { toTitleCase } from '../../../util/util';
 import ArchiveTable from '../ArchiveTable';
 
 const Users = () => {
-  const [deleteModalId, setDeleteModalId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
   const {token, logout} = useAuth();
 
   const sendFetch = useCallback(async () => {
@@ -25,28 +25,33 @@ const Users = () => {
   } = useFetch(sendFetch, [])
 
   const handleDeleteModal = (id) => {
-    setDeleteModalId(id);
+    setDeleteId(id);
   }
 
-  const handleDelete = (id) => {
-    setDeleteModalId(null);
+  const handleDelete = () => {
+    setDeleteId(null);
     setUsers(prev => {
       return prev.filter((user) => {
-        return user.id !== id; 
+        return user.id !== deleteId; 
       })
     });
+  }
+
+  const outputDeleteText = (entityToDelete) => {
+    return `Are you sure you wish to delete ${entityToDelete.first_name} ${entityToDelete.last_name} with email ${entityToDelete.email}?`;
   }
 
   return (
     <div className="min-h-full w-full p-5 sm:p-10 relative">
       <ArchiveHead
-      deleteModalId={deleteModalId}
-      setDeleteModalId={setDeleteModalId}
+      deleteModalId={deleteId}
+      setDeleteModalId={setDeleteId}
       title="Users"
       newLink='/admin/users/new'
       handleDelete={handleDelete}
       errMessage={errMessage}
-      baseRoute='/user'
+      deleteUrl={`${BASE_URL}/user/${deleteId}`}
+      outputDeleteText={outputDeleteText}
       isFetching={isFetching}/>
       {!errMessage && !isFetching && users?.length > 0 &&
         <ArchiveTable

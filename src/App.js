@@ -12,14 +12,10 @@ import Movies from './components/Admin/Movies/Movies';
 import NewMovie from './components/Admin/Movies/NewMovie';
 import EditMovie from './components/Admin/Movies/EditMovie';
 import SingleMovie from './components/FrontPages/SingleMovie';
-import Cinemas from './components/Admin/Cinemas/Cinemas';
-import EditCinema from './components/Admin/Cinemas/EditCinema';
 import Theatres from './components/Admin/Cinemas/Theatres';
-import NewCinema from './components/Admin/Cinemas/NewCinema';
-import ViewSessions from './components/Admin/Sessions/ViewSessions';
 import NewSession from './components/Admin/Sessions/NewSession';
 import EditSessions from './components/Admin/Sessions/EditSessions';
-
+import Sessions from "./components/Admin/Sessions/Sessions";
 
 function App() {
 
@@ -43,14 +39,12 @@ function App() {
             <Route path="edit/:id" element={<EditMovie/>}/>
             <Route path=":id/sessions" element={<EditSessions/>}/>
           </Route>
-          <Route path='cinemas'>
-            <Route index element={<Cinemas/>}/>
-            <Route path="new" element={<NewCinema/>}/>
-            <Route path="edit/:id" element={<EditCinema/>}/>
-            <Route path=":id/theatres" element={<Theatres/>}/>
-            <Route path=":id/sessions" element={<EditSessions/>}/>
-            <Route path=":cinema_id/sessions/:theatre_id/new" element={<NewSession/>}/>
-            <Route path=":cinema_id/sessions/:theatre_id/view" element={<ViewSessions/>}/>
+          <Route path="theatres">
+            <Route index element={<Theatres/>}/>
+          </Route>
+          <Route path="sessions">
+            <Route index element={<Sessions/>}/>
+            <Route path="new" element={<NewSession/>}/>
           </Route>
         </Route>
     ])

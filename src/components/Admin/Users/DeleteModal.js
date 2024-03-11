@@ -1,24 +1,23 @@
 import { useEffect, useRef, useCallback } from 'react';
-import { BASE_URL } from '../../../config/constants'
 import { useAuth } from '../../../context/AuthContext'
 import Button from '../../UI/Buttons/Button';
 import { createPortal } from 'react-dom';
 import { request } from '../../../util/http';
 import { useFetch } from '../../../hooks/useFetch';
 
-const DeleteModal = ({deleteId, setDeleteId, onDelete, baseRoute}) => {
+const DeleteModal = ({onDelete, setDeleteId, deleteUrl, outputDeleteText, deleteId}) => {
     const deleteBtnRef = useRef(null);
     const cancelBtnRef = useRef(null);
     const {token, logout} = useAuth();
 
     const sendFetch = useCallback(async () => {
         return await request(
-        `${BASE_URL}${baseRoute}/${deleteId}`, 
+        deleteUrl, 
         logout, 
         {
             'Authorization': `Bearer ${token}`
         }
-    )}, [token, logout, baseRoute, deleteId])
+    )}, [token, logout, deleteUrl])
 
     const {
         isFetching,
@@ -50,7 +49,7 @@ const DeleteModal = ({deleteId, setDeleteId, onDelete, baseRoute}) => {
 
     const handleDelete = () => {
         request(
-            `${BASE_URL}${baseRoute}/${deleteId}`,
+            deleteUrl,
             logout,
             {
                 'Authorization': `Bearer ${token}`
@@ -92,9 +91,7 @@ const DeleteModal = ({deleteId, setDeleteId, onDelete, baseRoute}) => {
                 { entityToDelete && !isFetching &&
                 <>
                     <p className="mb-5 text-center">
-                    {baseRoute === '/user' && `Are you sure you wish to delete ${entityToDelete.first_name} ${entityToDelete.last_name} with email ${entityToDelete.email}?`}
-                    {baseRoute === '/movie' && `Are you sure you wish to delete ${entityToDelete.title}?`}
-                    {baseRoute === '/cinema' && `Are you sure you wish to delete ${entityToDelete.name}?`}
+                    {outputDeleteText(entityToDelete)}
                     </p> 
                     <div className="flex gap-5">
                         <Button
