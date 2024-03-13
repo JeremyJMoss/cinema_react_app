@@ -61,6 +61,9 @@ const SingleMovie = () => {
                 <div className="py-6">
                     {movie.summary}
                 </div>
+                <div>
+                    <h2 className="font-semibold text-xl">Sessions</h2>
+                </div>
             </article>}
         </section>
     )

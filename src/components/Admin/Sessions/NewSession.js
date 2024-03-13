@@ -12,6 +12,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { formatDate } from "../../../util/util";
 
 import "react-datepicker/dist/react-datepicker.css";
+import ErrorMessage from "../../UI/ErrorMessage";
 
 const NewSession = () => {
     const { logout, token } = useAuth();
@@ -19,7 +20,7 @@ const NewSession = () => {
 
     const [formData, setFormData] = useState({
         theatre_id: null,
-        session_time: '0:00',
+        session_time: '00:00',
         session_date: null,
         movie_id: ''
     });
@@ -27,6 +28,7 @@ const NewSession = () => {
     const [timeOptions, setTimeOptions] = useState(TIMES);
     const [searchText, setSearchText] = useState('');
     const [ theatres, setTheatres ] = useState([]);
+    const [ errMessage, setErrMessage ] = useState('');
 
     useEffect(() => {
         const sendFetch = async () => {
@@ -47,17 +49,18 @@ const NewSession = () => {
                 })
 
                 setFormData({
-                    theatre_id: theatre_array[0],
-                    session_time: '0:00',
+                    theatre_id: theatre_array[0].value,
+                    session_time: '00:00',
                     session_date: null,
                     movie_id: ''
                 })
 
                 setTheatres(theatre_array);
+                setErrMessage('');
 
             }
             catch (error) {
-                console.log(error);
+                setErrMessage(error.message);
             }
 
         }
@@ -69,7 +72,7 @@ const NewSession = () => {
         if (fieldName === 'theatre_id'){
             return setFormData({
                 theatre_id: value,
-                session_time: '0:00',
+                session_time: '00:00',
                 session_date: null,
                 movie_id: ''
             })
@@ -155,9 +158,10 @@ const NewSession = () => {
                     });
                 }
                 setTimeOptions(session_times);
+                setErrMessage('');
             }
             catch (error) {
-                console.log(error);
+                setErrMessage(error.message);
             }
             
             
@@ -192,10 +196,11 @@ const NewSession = () => {
                     movie_id: formData.movie_id
                 }))
 
+                setErrMessage('');
                 navigate(`/admin/sessions`)
             }
             catch (error) {
-                console.log(error);
+                setErrMessage(error.message);
             }
         }
 
@@ -213,6 +218,9 @@ const NewSession = () => {
                 },
             ]}/>
             <div className="max-w-lg p-10">
+                {errMessage && 
+                <ErrorMessage
+                message={errMessage}/>}
                 <form>
                     <h1 className="text-2xl mb-6 text-slate-800 font-medium">Create New Session</h1>
                     {theatres && 

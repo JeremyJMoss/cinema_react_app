@@ -31,7 +31,11 @@ const ArchiveHead = ({isFetching, newLink, title, errMessage, deleteModalId, set
                 Add New
             </Button>}
             </div>
-            {isFetching && <div>Loading...</div>}
+            {isFetching && 
+            <div className="flex justify-center">
+                <p className="font-bold text-lg">Loading...</p>
+            </div>
+            }
         </>
     )
 }

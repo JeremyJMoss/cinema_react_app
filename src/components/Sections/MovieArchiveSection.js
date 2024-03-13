@@ -13,7 +13,7 @@ const MovieArchiveSection = () => {
 
     const sendFetch = useCallback(async () => {
         return await request(
-            `${BASE_URL}/movies?page=${page}`,
+            `${BASE_URL}/current-movies?page=${page}`,
             null,
             {}
         )

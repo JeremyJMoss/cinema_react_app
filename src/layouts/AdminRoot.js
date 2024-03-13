@@ -35,7 +35,7 @@ const AdminRoot = () => {
               <img src={hamburger_icon} className="w-6" alt=""/>
           </button>
         </header>
-        <div className="w-full grow min-h-full flex">
+        <div className="w-full flex">
           <aside className={`bg-green-200 fixed z-10 top-0 left-0 gap-6 sm:flex flex-col px-4 py-6 h-full w-40 ${asideOpen ? 'flex' : 'hidden'}`}>
             {asideOpen &&
               <button className="sm:hidden flex items-center" onClick={handleToggleAside}>
@@ -65,7 +65,7 @@ const AdminRoot = () => {
             icon={userIcon}
             href="/admin/users"/>
           </aside>
-          <main className='grow sm:ml-40 bg-slate-100'>
+          <main className='min-h-screen grow sm:ml-40 bg-slate-100'>
             <Outlet/>
           </main>
         </div>

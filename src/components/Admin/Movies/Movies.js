@@ -1,29 +1,40 @@
-import { useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { BASE_URL } from "../../../config/constants";
 import { request } from "../../../util/http";
-import { useFetch } from "../../../hooks/useFetch";
 import ArchiveHead from "../ArchiveHead";
 import ArchiveTable from "../ArchiveTable";
 
 const Movies = () => {
-  const [deleteId, setDeleteId] = useState(null);
+  const [ deleteId, setDeleteId ] = useState(null);
+  const [ isFetching, setIsFetching ] = useState(false)
+  const [ movies, setMovies ] = useState([]);
+  const [ errMessage, setErrMessage ] = useState('');
 
-  const sendFetch = useCallback(
-    async () => await request(`${BASE_URL}/movies`, 
-    null, 
-    {}
-  ), [])
+  useEffect(() => {
+    const sendFetch = async () => {
+      try {
+        setIsFetching(true);
+        const response = await request(
+          `${BASE_URL}/movies`, 
+          null, 
+          {}
+        )
+        setIsFetching(false);
+        setErrMessage('');
+        setMovies(response.movies);
+      }
+      catch (error) {
+        setIsFetching(false);
+        setErrMessage(error.message);
+      }
+    }
 
-  const { 
-    isFetching, 
-    data,
-    setData: setMovies, 
-    errMessage 
-  } = useFetch(sendFetch,[])
+    sendFetch();
+  }, [request])
 
   const handleDelete = (id) => {
     setDeleteId(null);
-    setMovies(prev => prev.movies.filter((movie) => movie.id !== id));
+    setMovies(prev => prev.filter((movie) => movie.id !== id));
   }
 
   const handleDeleteModal = (id) => {
@@ -46,7 +57,7 @@ const Movies = () => {
       deleteUrl={`${BASE_URL}/movie/${deleteId}`}
       outputDeleteText={outputDeleteText}
       isFetching={isFetching}/>
-      {!errMessage && !isFetching && data?.movies?.length > 0 &&
+      {!errMessage && !isFetching && movies.length > 0 &&
         <ArchiveTable
         information={{
           labels: [
@@ -54,7 +65,7 @@ const Movies = () => {
             "Rating",
             "Runtime(mins)"
           ],
-          data: data.movies.map((movie => {
+          data: movies.map((movie => {
             return {
               id: movie.id,
               fields: [
