@@ -1,7 +1,7 @@
 import { Link, Outlet } from "react-router-dom"
 import Login from "../components/Auth/Login";
 import { useAuth } from '../context/AuthContext';
-import flickfind_logo from "../assets/flick_and_find.svg";
+import mosscinema_logo from "../assets/moss_cinema_logo.svg";
 import hamburger_icon from "../assets/icons8-hamburger-menu.svg";
 import Button from "../components/UI/Buttons/Button";
 import { useState } from "react";
@@ -24,7 +24,7 @@ const Root = () => {
             <header className="flex w-full justify-between items-center px-3 md:px-10 py-5">
                 <div>
                     <Link to="/">
-                        <img className="md:w-32 w-24" alt="Flick and Find Logo" src={flickfind_logo} />
+                        <img className="md:w-40 w-28" alt="Moss Cinema logo" src={mosscinema_logo} />
                     </Link>
                 </div>
                 <button onClick={toggleMenu} className='inline-block sm:hidden'>

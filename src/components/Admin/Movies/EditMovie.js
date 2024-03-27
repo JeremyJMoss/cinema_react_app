@@ -10,7 +10,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useFetch } from "../../../hooks/useFetch";
 import CoverArtInput from "../CoverArtInput";
 import MultiSelectAjax from "../../UI/MultiSelectAjax";
-import TabularNav from "../../UI/TabularNav";
 
 const EditMovie = () => {
     const {id} = useParams();
@@ -162,13 +161,6 @@ const EditMovie = () => {
 
     return (
         <>
-            <TabularNav
-            links={[
-                {
-                    text: 'Movie',
-                    to: `/admin/movies/edit/${id}`
-                }
-            ]}/>
             <div className="max-w-2xl p-10">
                 {isFetching &&
                 <div>Loading...</div>

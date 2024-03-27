@@ -1,7 +1,6 @@
-import { useCallback, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BASE_URL } from '../../config/constants';
 import defaultCoverArt from "../../assets/ImageDefaultPoster.png";
-import { useFetch } from '../../hooks/useFetch';
 import { request } from '../../util/http';
 import Pagination from '../UI/Pagination';
 import Rating from './Partials/Rating';
@@ -9,25 +8,41 @@ import { Link } from 'react-router-dom';
 import ErrorMessage from '../UI/ErrorMessage';
 
 const MovieArchiveSection = () => {
-    const [page, setPage] = useState(1);
+    const [ page, setPage ] = useState(1);
+    const [ isFetching, setIsFetching ] = useState(false);
+    const [ movies, setMovies ] = useState([]);
+    const [ totalPages, setTotalPages ] = useState(null);
+    const [ errMessage, setErrMessage ] = useState('');
 
-    const sendFetch = useCallback(async () => {
-        return await request(
-            `${BASE_URL}/current-movies?page=${page}`,
-            null,
-            {}
-        )
+    useEffect(() => {
+        const sendFetch = async () => {
+            setIsFetching(true);
+            try{
+                const response = await request(
+                    `${BASE_URL}/current-movies?page=${page}`,
+                    null,
+                    {}
+                )
+                setMovies(response.movies);
+                if (response.totalPages){
+                    setTotalPages(response.totalPages);
+                }
+                setErrMessage('');
+            }
+            catch (error) {
+                setErrMessage(error.message);
+            }
+            finally {
+                setIsFetching(false);
+            }
+        };
+
+        sendFetch();
     }, [page])
 
-    const {
-        isFetching,
-        data,
-        errMessage
-    } = useFetch(sendFetch, null)
-
     return (
-        <section className=''>
-            {isFetching && <div>Loading...</div>}
+        <section>
+            {isFetching && <div className='flex justify-center text-lg'>Loading...</div>}
             {errMessage && 
             <ErrorMessage
             message={errMessage}
@@ -35,8 +50,8 @@ const MovieArchiveSection = () => {
             <div 
             className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 place-items-center'
             >
-            {data?.movies?.length > 0 && !isFetching &&
-            data.movies.map(movie => {
+            {movies?.length > 0 && !isFetching &&
+            movies.map(movie => {
                 return (
                 <div 
                 key={movie.id} 
@@ -65,10 +80,14 @@ const MovieArchiveSection = () => {
                 )
             })}
             </div>
-            {data?.totalPages && !isFetching && !errMessage &&
+            {movies.length === 0 && !isFetching &&
+            <div className='flex justify-center'>
+                <p className='text-lg'>No Movie Sessions Found!</p>
+            </div>}
+            {totalPages && !isFetching && !errMessage &&
             <Pagination
             page={page}
-            totalPages={data.totalPages}
+            totalPages={totalPages}
             handlePagination={setPage}/>
             }
         </section>

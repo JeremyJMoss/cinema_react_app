@@ -30,7 +30,7 @@ const Movies = () => {
     }
 
     sendFetch();
-  }, [request])
+  }, [])
 
   const handleDelete = (id) => {
     setDeleteId(null);

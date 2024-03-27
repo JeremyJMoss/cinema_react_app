@@ -8,7 +8,7 @@ const Input = ({fieldType, fieldName, name, required, onFieldChange, ...props}) 
     };
   
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col grow">
             <label 
             htmlFor={name}
             className="mb-4 text-md sm:text-lg">

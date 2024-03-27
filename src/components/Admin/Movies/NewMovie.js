@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../UI/ErrorMessage";
 import { request } from "../../../util/http";
 import CoverArtInput from "../CoverArtInput";
-import TabularNav from "../../UI/TabularNav";
 
 const NewMovie = () => {
     const { token, logout } = useAuth();
@@ -128,14 +127,6 @@ const NewMovie = () => {
     }
 
     return (
-        <>
-            <TabularNav
-            links={[
-                {
-                    text: 'Movie',
-                    to: '/admin/movies/new'
-                }
-            ]}/>
             <div className="max-w-2xl p-10">
                 <form>
                     <h1 className="text-2xl mb-6 text-slate-800 font-medium">Create New Movie</h1>
@@ -236,7 +227,6 @@ const NewMovie = () => {
                     </div>
                 </form>
             </div>
-        </>
     )
 }
 

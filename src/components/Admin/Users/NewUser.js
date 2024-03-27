@@ -7,7 +7,6 @@ import Button from "../../UI/Buttons/Button";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../UI/ErrorMessage";
 import { request } from "../../../util/http";
-import TabularNav from "../../UI/TabularNav";
 
 const NewUser = () => {
     const { token, user, logout } = useAuth();
@@ -62,13 +61,6 @@ const NewUser = () => {
 
     return (
         <>
-            <TabularNav
-            links={[
-                {
-                    text: 'User',
-                    to: '/admin/users/new'
-                }
-            ]}/>
             <div className="max-w-2xl p-10">
                 <form>
                     <h1 className="text-2xl mb-6 text-slate-800 font-medium">Create New User</h1>

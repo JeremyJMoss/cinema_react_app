@@ -8,7 +8,7 @@ module.exports = {
         'paper': '#ddc385'
       },
       boxShadow: {
-        'custom': '4px 8px 10px 3px rgba(0,0,0,0.1)'
+        'custom': '0px 0px 10px 4px rgba(0,0,0,0.2)'
       }
     },
   },

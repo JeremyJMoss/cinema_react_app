@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import hamburger_icon from "../assets/icons8-hamburger-menu.svg";
 
 const AdminRoot = () => {
-  const {user} = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [ asideOpen, setAsideOpen ] = useState(false);
 

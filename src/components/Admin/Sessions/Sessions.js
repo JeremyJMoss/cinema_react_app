@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
 import { request } from "../../../util/http";
 import { BASE_URL } from "../../../config/constants";
-import DatePicker from "react-datepicker";
 import ArchiveTable from "../ArchiveTable";
 import ArchiveHead from "../ArchiveHead";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 const Sessions = () => {
-    const [ selectedSessionDate, setSelectedSessionDate ] = useState(null);
     const [ deleteId, setDeleteId ] = useState(null);
     const [ isFetching, setIsFetching ] = useState(false);
     const [ sessions, setSessions ] = useState([])
     const [ errMessage, setErrMessage ] = useState('');
+    const [ activeLink, setActiveLink ] = useState('');
 
     useEffect(() => {
         const sendFetch = async () => {
@@ -34,12 +33,7 @@ const Sessions = () => {
         }
 
         sendFetch()
-    }, [request])
-
-
-    const handleChangeDate = (date) => {
-        setSelectedSessionDate(date);
-    }
+    }, [])
 
     const handleDelete = () => {
         setDeleteId(null);
@@ -51,21 +45,23 @@ const Sessions = () => {
     }
 
     const handleClick = async (timeline) => {
+        setActiveLink(timeline);
         try {
             setIsFetching(true);
             const response = await request(
-                `${BASE_URL}/sessions?with_movies=true${timeline && `&era=${timeline}`}`,
+                `${BASE_URL}/sessions?with_movies=true${timeline && `&timeline=${timeline}`}`,
                 null,
                 {}
             )
 
             setErrMessage('');
-            setIsFetching(false);
             setSessions(response);
         }
         catch (error) {
-            setIsFetching(false);
             setErrMessage(error.message);
+        }
+        finally {
+            setIsFetching(false)
         }
 
         
@@ -94,37 +90,16 @@ const Sessions = () => {
             outputDeleteText={outputDeleteText}
             />
             <ul className="pb-3 flex pl-3 gap-5 font-semibold">
-                <li role="button" onClick={() => handleClick()}>
+                <li role="button" className={activeLink === '' && 'border-b-4 border-orange-200'} onClick={() => handleClick('')}>
                     All
                 </li>
-                <li role="button" onClick={() => handleClick('future')}>
+                <li role="button" className={activeLink === 'future' && 'border-b-4 border-orange-200'} onClick={() => handleClick('future')}>
                     Upcoming
                 </li>
-                <li role="button" onClick={() => handleClick('past')}>
+                <li role="button" className={activeLink === 'past' && 'border-b-4 border-orange-200'} onClick={() => handleClick('past')}>
                     Past
                 </li>
             </ul>
-            {/* TODO sort out session_date filter
-            <form className="mb-3">
-                <div className='flex grow flex-col max-w-lg'>
-                    <label 
-                    className="mb-3 sm:text-lg" 
-                    htmlFor="session_date"
-                    >
-                        Session Date <span className="text-red-500">*</span>
-                    </label>
-                    <DatePicker
-                    id="session_date"
-                    minDate={new Date()}
-                    placeholderText="Select session date"
-                    withPortal
-                    portalId="body"
-                    selected={selectedSessionDate}
-                    onChange={handleChangeDate}
-                    dateFormat="dd/MM/yyyy"
-                    />
-                </div>
-            </form> */}
             {sessions.length > 0 && !isFetching &&
                 <ArchiveTable
                 information={{

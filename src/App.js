@@ -12,10 +12,12 @@ import Movies from './components/Admin/Movies/Movies';
 import NewMovie from './components/Admin/Movies/NewMovie';
 import EditMovie from './components/Admin/Movies/EditMovie';
 import SingleMovie from './components/FrontPages/SingleMovie';
-import Theatres from './components/Admin/Cinemas/Theatres';
+import Theatres from './components/Admin/Theatres/Theatres';
 import NewSession from './components/Admin/Sessions/NewSession';
-import EditSessions from './components/Admin/Sessions/EditSessions';
 import Sessions from "./components/Admin/Sessions/Sessions";
+import EditTheatre from './components/Admin/Theatres/EditTheatre';
+import NewTheatre from './components/Admin/Theatres/NewTheatre';
+import OrderProcess from './components/FrontPages/OrderProcess';
 
 function App() {
 
@@ -24,7 +26,10 @@ function App() {
         <Route path="/" element={<Root />}>
           <Route index element={<Home/>} />
           <Route path="signup" element={<Signup/>}/>
-          <Route path="movies/:id" element={<SingleMovie/>}/>
+          <Route path="movies/:id">
+            <Route index element={<SingleMovie/>} />
+            <Route path="order" element={<OrderProcess/>}/>
+          </Route>
         </Route>,
         <Route path="/admin" element={<AdminRoot />} >
           <Route index element={<AdminDashboard/>}/>
@@ -37,10 +42,11 @@ function App() {
             <Route index element={<Movies/>}/>
             <Route path="new" element={<NewMovie/>}/>
             <Route path="edit/:id" element={<EditMovie/>}/>
-            <Route path=":id/sessions" element={<EditSessions/>}/>
           </Route>
           <Route path="theatres">
             <Route index element={<Theatres/>}/>
+            <Route path="edit/:id" element={<EditTheatre/>}/>
+            <Route path="new" element={<NewTheatre/>}/>
           </Route>
           <Route path="sessions">
             <Route index element={<Sessions/>}/>

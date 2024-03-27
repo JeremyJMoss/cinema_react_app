@@ -53,6 +53,54 @@ export const THEATRE_TYPES = [
     }
 ]
 
+export const TICKET_TYPES = [
+    {
+        label: 'Adult',
+        price: {
+            "Standard": 25.50,
+            "Gold Class": 46,
+            "V-Max": 32,
+            "Drive-In": 35
+        }    
+    },
+    {
+        label:'Child',
+        price: {
+            "Standard": 19.50,
+            "Gold Class": 46,
+            "V-Max": 24,
+            "Drive-In": 35
+        }
+    },
+    {
+        label: 'Pensioner',
+        price: {
+            "Standard": 21.50,
+            "Gold Class": 46,
+            "V-Max": 27,
+            "Drive-In": 35
+        }
+    },
+    {
+        label: 'Senior',
+        price: {
+            "Standard": 18.50,
+            "Gold Class": 46,
+            "V-Max": 24,
+            "Drive-In": 35
+        }
+    },
+    {
+        label: 'Student',
+        price: {
+            "Standard": 21.50,
+            "Gold Class": 46,
+            "V-Max": 27,
+            "Drive-In": 35
+        }
+    }
+]
+
 export const TIMES = Array.from({length: 48}).map((_, index) => {
     const hour = String((Math.floor(index / 2))).padStart(2, '0');
     const minutes = index % 2 === 0 ? '00' : '30';

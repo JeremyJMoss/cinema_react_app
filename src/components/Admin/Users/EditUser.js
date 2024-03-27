@@ -8,7 +8,6 @@ import Select from '../../UI/Select';
 import ErrorMessage from '../../UI/ErrorMessage';
 import { useFetch } from '../../../hooks/useFetch';
 import { request } from '../../../util/http';
-import TabularNav from '../../UI/TabularNav';
 
 const EditUser = () => {
     const {id} = useParams();
@@ -81,13 +80,6 @@ const EditUser = () => {
     
     return (
         <>
-            <TabularNav
-            links={[
-                {
-                    text: 'User',
-                    to: `/admin/users/edit/${id}`
-                }
-            ]}/>
             <div className="max-w-2xl p-10">
                 {isFetching &&
                     <div>Loading...</div>

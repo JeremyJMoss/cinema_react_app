@@ -210,13 +210,6 @@ const NewSession = () => {
 
     return (
         <>
-            <TabularNav
-            links={[
-                {
-                    text: 'Sessions',
-                    to: `/admin/sessions/new`
-                },
-            ]}/>
             <div className="max-w-lg p-10">
                 {errMessage && 
                 <ErrorMessage
